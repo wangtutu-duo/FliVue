@@ -46,12 +46,19 @@ export const commonNodes = [
 		icon: 'autoIcon',
     nodeDesc:'自动节点'
 	},
-	{
-		type: 'gateway', 
-		nodeName: '',
-    nodeDesc: '网关',
+
+  {
+    type: 'ingate',
+    nodeName: '',
+    nodeDesc: '合并',
     icon: 'GatewayIcon'
-	},
+  },
+  {
+    type: 'outgate',
+    nodeName: '',
+    nodeDesc: '分发',
+    icon: 'GatewayIcon'
+  },
 	{
 		type: 'event', 
 		nodeName: '',

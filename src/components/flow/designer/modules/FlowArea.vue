@@ -579,7 +579,8 @@
 				newNode.id = newNode.type + '-' + ZFSN.getId();
 				newNode.height = 50;
 				if (newNode.type == 'start' || newNode.type == 'end' || 
-					newNode.type == 'event' || newNode.type == 'gateway') {
+					newNode.type == 'event' || newNode.type == 'gateway'||
+					newNode.type == 'ingate' || newNode.type == 'outgate') {
 					newNode.x = x - 25;
 					newNode.width = 50;
 				} else {

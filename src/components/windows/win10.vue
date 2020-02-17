@@ -29,14 +29,13 @@
   import notifybar from '@/components/windows/notifybar.vue'
   import taskbar from '@/components/windows/taskbar.vue'
   import windows from '@/components/windows/window/window.vue'
-  import contain from '@/components/windows/contains/contain.vue'
+
   import folder from '@/components/windows/folder/folder.vue'
   export default {
     components: {
       'notifybar': notifybar,
       'taskbar': taskbar,
       'windows': windows,
-      'contain': contain,
       'folder': folder
     },
     data: function () {

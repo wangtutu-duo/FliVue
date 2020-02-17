@@ -46,6 +46,72 @@ $common-node-active: #409EFF;
     }
 }
 
+.common-out-diamond-node {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  text-align: center;
+  border: 1px solid #777;
+  border-radius: 3px;
+  background-color: $common-node-bg;
+  transform: rotate(45deg);
+  white-space: nowrap;
+
+  &:before {
+    position: absolute;
+    content: '分发';
+    transform: rotate(-45deg);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &:hover {
+    background-color: $common-node-bg-hover;
+    z-index: 2;
+  }
+
+  &.active {
+    outline: 2px dashed $common-node-active;
+    outline-offset: 0px;
+  }
+}
+
+.common-in-diamond-node {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  text-align: center;
+  border: 1px solid #777;
+  border-radius: 3px;
+  background-color: $common-node-bg;
+  transform: rotate(45deg);
+  white-space: nowrap;
+
+  &:before {
+    position: absolute;
+    content: '合并';
+    transform: rotate(-45deg);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &:hover {
+    background-color: $common-node-bg-hover;
+    z-index: 2;
+  }
+
+  &.active {
+    outline: 2px dashed $common-node-active;
+    outline-offset: 0px;
+  }
+}
+
 .common-diamond-node {
     position: absolute;
     height: 50px;

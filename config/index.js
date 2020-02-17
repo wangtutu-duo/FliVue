@@ -16,7 +16,7 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: true,
     proxyTable: {
-      '/fli': {
+      '/myfli': {
         target: 'http://localhost:8889/',
         changeOrigin: true,
       },

@@ -67,15 +67,40 @@
   </div>
 
   <div v-else-if="node.type == 'gateway'"
-      :id="node.id"
-      class="common-diamond-node"
-      :class="{ active: isActive() }"
-      :style="{ top: node.y + 'px', left: node.x + 'px', 
-    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' : 
-    																								(currentTool.type == 'zoom' ? 'zoom-in' : 
+               :id="node.id"
+               class="common-diamond-node"
+               :class="{ active: isActive() }"
+               :style="{ top: node.y + 'px', left: node.x + 'px',
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
+    																								(currentTool.type == 'zoom' ? 'zoom-in' :
     																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
-      @click.stop="selectNode"
-      @contextmenu.stop="showNodeContextMenu">
+               @click.stop="selectNode"
+               @contextmenu.stop="showNodeContextMenu">
+
+</div>
+
+  <div v-else-if="node.type == 'ingate'"
+       :id="node.id"
+       class="common-in-diamond-node"
+       :class="{ active: isActive() }"
+       :style="{ top: node.y + 'px', left: node.x + 'px',
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
+    																								(currentTool.type == 'zoom' ? 'zoom-in' :
+    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+       @click.stop="selectNode"
+       @contextmenu.stop="showNodeContextMenu">
+  </div>
+  <div v-else-if="node.type == 'outgate'"
+       :id="node.id"
+       class="common-out-diamond-node"
+       :class="{ active: isActive() }"
+       :style="{ top: node.y + 'px', left: node.x + 'px',
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
+    																								(currentTool.type == 'zoom' ? 'zoom-in' :
+    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+       @click.stop="selectNode"
+       @contextmenu.stop="showNodeContextMenu">
+
   </div>
 
   <div v-else-if="node.type == 'child-flow'"
@@ -154,7 +179,7 @@
 				that.plumb.draggable(that.node.id, {
 					containment: 'parent',
 					handle: function(e, el) {
-						var possibles = el.parentNode.querySelectorAll('.common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div');
+						var possibles = el.parentNode.querySelectorAll('.common-circle-node,.common-rectangle-node,.common-in-diamond-node,.common-out-diamond-node,.common-diamond-node,.lane-text-div');
 		        for (var i = 0; i < possibles.length; i++) {
 	            if (possibles[i] === el || e.target.className == 'lane-text') return true;
 		        }
