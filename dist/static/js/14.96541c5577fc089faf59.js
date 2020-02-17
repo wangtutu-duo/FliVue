@@ -1,0 +1,2 @@
+webpackJsonp([14],{bBNM:function(e,t){},"zB+G":function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n={name:"flowUser",components:{flowMaker:r("sQ21").default},props:{itemId:String,compara:String}},a={render:function(){var e=this.$createElement,t=this._self._c||e;return t("div",{staticStyle:{height:"100%"}},[t("flow-maker",{attrs:{"flow-id":"secUser"}})],1)},staticRenderFns:[]};var s=r("VU/8")(n,a,!1,function(e){r("bBNM")},"data-v-558c6579",null);t.default=s.exports}});
+//# sourceMappingURL=14.96541c5577fc089faf59.js.map
