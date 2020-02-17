@@ -42,7 +42,7 @@
 
       validateOrg(field, value) {
         if (value ==null ||value === '') {
-          field.fieldMessage="好啊好啊"
+          field.fieldMessage="好啊  好啊"
           return false
         } else {
           return true
