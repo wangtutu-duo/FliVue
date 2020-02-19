@@ -47,61 +47,61 @@ instance.interceptors.response.use(
 export default {
   //用户注册
   userRegister(data) {
-    return axios.post('/myfli/register', data);
+    return axios.post('/myflid/register', data);
   },
   //用户登录
   userLogin(data) {
 
-    return axios.post('/myfli/login', data);
+    return axios.post('/myflid/login', data);
   },
     //用户登录
     userLogout(data) {
 
-      return axios.post('/myfli/logout', data);
+      return axios.post('/myflid/logout', data);
     },
   //获取用户
    getUser(data) {
-    return instance.post('/myfli/user', data);
+    return instance.post('/myflid/user', data);
    // return instance.post('/rat/user', data);
   },
   //删除用户
   delUser(data) {
-    return instance.post('/myfli/delUser', data);
+    return instance.post('/myflid/delUser', data);
   },
   doTask(para) {
 
-    return axios.post('/myfli/doTask', para);
+    return axios.post('/myflid/doTask', para);
   },
   doSetting(para) {
 
-    return instance.post('/myfli/doSetting', para);
+    return instance.post('/myflid/doSetting', para);
   },
 
   doInquire(para) {
-    return instance.post('/myfli/doInquire', para);
+    return instance.post('/myflid/doInquire', para);
   },
   getPara(data)
   {
 
-    var ret = instance.post('/myfli/getPara', data);
+    var ret = instance.post('/myflid/getPara', data);
     return ret;
   },
   savePara(data)
   {
 
-    var ret = instance.post('/myfli/savePara', data);
+    var ret = instance.post('/myflid/savePara', data);
     return ret;
   },
   getDataList(data)
   {
 
-    var ret = instance.post('/myfli/doList', data);
+    var ret = instance.post('/myflid/doList', data);
     return ret;
   },
   getInfo(data)
   {
 
-    var ret = instance.post('/myfli/getInfo', data);
+    var ret = instance.post('/myflid/getInfo', data);
     return ret;
   },
 
