@@ -528,47 +528,12 @@
 				
 				arr.push(Object.assign({}, that.currentSelect));
 
+        this.$emit("flowdatachange",arr);
 
 
 
 
-				arr.forEach(function(cell, index) {
-					let conns = that.getConnectionsByNodeId(cell.id);
-					conns.forEach(function(conn, index) {
-						linkList.splice(linkList.findIndex(link => (link.sourceId == conn.sourceId || link.targetId == conn.targetId)), 1);
-					});
-					that.plumb.deleteEveryEndpoint();
-					let inx = nodeList.findIndex(node => node.id == cell.id);
-					nodeList.splice(inx, 1);
-					that.$nextTick(() => {
-						linkList.forEach(function(link, index) {
-							let conn = that.plumb.connect({
-								source: link.sourceId,
-								target: link.targetId,
-								anchor: flowConfig.jsPlumbConfig.anchor.default,
-								connector: [
-									link.cls.linkType,
-									{
-										gap: 10,
-										cornerRadius: 8,
-										alwaysRespectStubs: true
-									}
-								],
-								paintStyle: {
-									stroke: link.cls.linkColor,
-									strokeWidth: link.cls.linkThickness
-								}
-							});
-							if (link.label != ''&&conn) {
-								conn.setLabel({
-									label: link.label,
-									cssClass: 'linkLabel'
-								});
-							}
-						});
-					});
-				});
-				that.selectContainer();
+				//that.selectContainer();
 			},
 			addNewNode (node) {
 				const that = this;

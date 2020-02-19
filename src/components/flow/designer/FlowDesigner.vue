@@ -129,6 +129,7 @@
             @findNodeConfig="findNodeConfig"
             @selectTool="selectTool"
             @getShortcut="getShortcut"
+            @flowdatachange="flowdatachange"
             @saveFlow="saveFlow">
           </flow-area>
           <vue-context-menu
@@ -308,6 +309,7 @@
       }
     },
     methods: {
+
       toggleNodeShow0(flag) {
         if (!flag) {
           this.tag.toolShow = false;
@@ -564,7 +566,7 @@
               linkList.forEach(function (link, index) {
                 that.flowData.linkList.push(link);
               })
-              this.loadFlow(data.info)
+              this.loadFlow()
             }
             else {
 
@@ -581,7 +583,7 @@
 
       },
 
-      loadFlow(loadData) {
+      loadFlow() {
         const that = this;
 
         //let loadData = JSON.parse(json);
@@ -892,7 +894,25 @@
           maxY: maxY
         };
       },
+      flowdatachange(arr)
+      {
+        const that = this;
+        let nodeList = that.flowData.nodeList
+        let linkList = that.flowData.linkList
 
+
+        arr.forEach(function(cell, index) {
+          that.plumb.remove(cell.id)
+
+          let inx = nodeList.findIndex(node => node.id == cell.id);
+          nodeList.splice(inx, 1);
+
+          let inx1 = linkList.findIndex(link => (link.sourceId == cell.id || link.targetId == cell.id));
+          linkList.splice(inx1, 1);
+
+        });
+        this.loadFlow()
+      },
       clear() {
         const that = this;
         that.flowData.nodeList.forEach(function (node, index) {
@@ -944,12 +964,15 @@
         const that = this;
         let sourceId = that.currentSelect.sourceId;
         let targetId = that.currentSelect.targetId;
-        that.plumb.deleteConnection(that.plumb.getConnections({
+        let conns = that.plumb.getConnections({
           source: sourceId,
           target: targetId
-        })[0]);
+        })
+        that.plumb.deleteConnection(conns[0]);
+
         let linkList = that.flowData.linkList;
-        linkList.splice(linkList.findIndex(link => (link.sourceId == sourceId || link.targetId == targetId)), 1);
+        let inx = linkList.findIndex(link => (link.sourceId == sourceId || link.targetId == targetId))
+        linkList.splice(inx , 1);
         that.currentSelect = {};
       },
       loseShortcut() {
