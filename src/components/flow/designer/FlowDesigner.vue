@@ -79,6 +79,11 @@
           <a-tooltip title="生成流程图片" placement="bottom">
             <a-button @click="exportFlowPicture" class="header-option-button" size="small" icon="picture"></a-button>
           </a-tooltip>
+          <a-popconfirm title="确认要重新加载吗？" placement="bottom" okText="确认" cancelText="取消" @confirm="loadFlowData">
+            <a-tooltip title="重新加载" placement="bottom">
+              <a-button class="header-option-button" size="small" icon="delete"></a-button>
+            </a-tooltip>
+          </a-popconfirm>
           <a-popconfirm title="确认要重新绘制吗？" placement="bottom" okText="确认" cancelText="取消" @confirm="clear">
             <a-tooltip title="重新绘制" placement="bottom">
               <a-button class="header-option-button" size="small" icon="delete"></a-button>
@@ -540,18 +545,35 @@
         const that = this;
         let flowName = this.flowId;
         that.loading = true;
+        that.clear();
         let flow = {paraType: "getFlowPara", paraName: flowName}
         axios.getPara(flow).then(({data}) => {
           if (data.isSuccess) {
             this.$message.success('获取流程成功！');
-            if (data.info)
+
+            if (data.info) {
+              let loadData = data.info;
+              that.flowData.attr = data.info.attr;
+              that.flowData.config = data.info.config;
+              that.flowData.status = flowConfig.flowStatus.LOADING;
+              let nodeList = loadData.nodeList;
+              nodeList.forEach(function (node, index) {
+                that.flowData.nodeList.push(node);
+              });
+              let linkList = loadData.linkList;
+              linkList.forEach(function (link, index) {
+                that.flowData.linkList.push(link);
+              })
               this.loadFlow(data.info)
+            }
             else {
+
               that.flowData.status = flowConfig.flowStatus.CREATE
 
               that.flowData.attr.name = flowName;
               that.flowData.attr.desc = '权限操作流程';
               that.flowData.attr.id = 'flow-' + ZFSN.getId();
+
             }
           }
           that.loading = false;
@@ -562,20 +584,16 @@
       loadFlow(loadData) {
         const that = this;
 
-        that.clear();
         //let loadData = JSON.parse(json);
-        that.flowData.attr = loadData.attr;
-        that.flowData.config = loadData.config;
-        that.flowData.status = flowConfig.flowStatus.LOADING;
+        let nodeList = that.flowData.nodeList;
+
+        let linkList = that.flowData.linkList;
+
         that.plumb.batch(function () {
-          let nodeList = loadData.nodeList;
-          nodeList.forEach(function (node, index) {
-            that.flowData.nodeList.push(node);
-          });
-          let linkList = loadData.linkList;
+
           that.$nextTick(() => {
             linkList.forEach(function (link, index) {
-              that.flowData.linkList.push(link);
+              //that.flowData.linkList.push(link);
               let conn = that.plumb.connect({
                 source: link.sourceId,
                 target: link.targetId,
@@ -684,21 +702,85 @@
         console.log('切换到缩小工具');
       },
       checkFlow() {
-        const that = this;
-        let nodeList = that.flowData.nodeList;
 
-        if (nodeList.length <= 0) {
-          this.$message.error('流程图中无任何节点！');
-          return false;
-        }
-        return true;
+
+          const that = this;
+          let nodeList = that.flowData.nodeList;
+          let linkList=that.flowData.linkList;
+
+          if (nodeList.length <= 0) {
+            this.$message.error('流程图中无任何节点！');
+            return false;
+          }
+          for(let ii = 0; ii<nodeList.length; ii++)
+          {
+            let chekcNode = nodeList[ii];
+            let nodeId = chekcNode.id;
+            let filter0 = linkList.filter(link => (link.sourceId == nodeId || link.targetId == nodeId));
+
+            if (filter0.length == 0) {
+              that.$message.error('节点没有连接任何连线！');
+              return false;
+            }
+            let filter1 = linkList.filter(link => (link.sourceId == nodeId));
+
+            console.debug("filter1.length:" + filter1.length);
+            for(let ii=0; ii<filter1.length; ii++)
+            {
+
+              let checkLink = filter1[ii];
+              console.debug("checklink:" + checkLink);
+              let sourceId = checkLink.sourceId;
+              let targetId = checkLink.targetId;
+              let filter2 = filter1.filter(link => (link.sourceId == sourceId && link.targetId == targetId));
+              console.debug("filter2.length:" + filter2.length);
+              if(filter2.length>1)
+              {
+                that.$message.error('两个节点之间有超过两条连线！');
+                return false;
+              }
+
+            }
+
+          }
+
+          for(let ii = 0; ii<linkList.length; ii++)
+          {
+            let chekcLink = linkList[ii];
+            let sourceId = chekcLink.sourceId;
+            let targetId = chekcLink.targetId;
+            let filter = nodeList.filter(node => (node.id == sourceId || node.id == targetId));
+
+            if (filter.length == 0) {
+              that.$message.error('联线没有连接任何节点！');
+              return false;
+            }
+            else if(filter.length == 1)
+            {
+              that.$message.error('联线只连接一个节点！需要连接两个节点');
+              return false;
+            }
+            else if (filter.length > 2)
+            {
+              that.$message.error('两个节点之间连线超过两条！需要删除其中一条');
+              return false;
+            }
+
+          }
+
+          return true;
+
       },
       saveFlow() {
         const that = this;
         that.loading = true;
         let flowObj = Object.assign({}, that.flowData);
 
-        if (!that.checkFlow()) return;
+        if (!that.checkFlow())
+        {
+          that.loading = false;
+          return;
+        }
 
         let d = JSON.stringify(flowObj);
         console.log(d);
@@ -810,6 +892,7 @@
           maxY: maxY
         };
       },
+
       clear() {
         const that = this;
         that.flowData.nodeList.forEach(function (node, index) {
@@ -820,6 +903,7 @@
         that.flowData.nodeList = [];
         that.flowData.linkList = [];
         that.flowData.remarks = [];
+
       },
       toggleShowGrid() {
         let flag = this.flowData.config.showGrid;
@@ -922,5 +1006,5 @@
 </script>
 
 <style lang="scss">
-  @import './style/flow-designer.scss'
+  @import './style/flow-designer.scss';
 </style>
