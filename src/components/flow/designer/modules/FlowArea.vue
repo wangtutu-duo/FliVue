@@ -527,14 +527,18 @@
 				let arr = [];
 				
 				arr.push(Object.assign({}, that.currentSelect));
-				
-				arr.forEach(function(c, index) {
-					let conns = that.getConnectionsByNodeId(c.id);
+
+
+
+
+
+				arr.forEach(function(cell, index) {
+					let conns = that.getConnectionsByNodeId(cell.id);
 					conns.forEach(function(conn, index) {
 						linkList.splice(linkList.findIndex(link => (link.sourceId == conn.sourceId || link.targetId == conn.targetId)), 1);
 					});
 					that.plumb.deleteEveryEndpoint();
-					let inx = nodeList.findIndex(node => node.id == c.id);
+					let inx = nodeList.findIndex(node => node.id == cell.id);
 					nodeList.splice(inx, 1);
 					that.$nextTick(() => {
 						linkList.forEach(function(link, index) {
