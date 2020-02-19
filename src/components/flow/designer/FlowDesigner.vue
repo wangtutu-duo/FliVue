@@ -70,6 +70,7 @@
             </a-list>
           </div>
         </a-row>
+        {{linkinfo}}
       </a-layout-sider>
       <a-layout>
         <a-layout-header class="header-option">
@@ -266,6 +267,7 @@
           highNodeShow: true,
           laneNodeShow: true
         },
+        linkinfo:"",
         browserType: 3,
         plumb: {},
         field: {
@@ -397,14 +399,19 @@
         that.plumb.bind('connection', function (conn, e) {
           let connObj = conn.connection.canvas;
           let o = {}, id, label, condition;
-          if (that.flowData.status == flowConfig.flowStatus.CREATE || that.flowData.status == flowConfig.flowStatus.MODIFY) {
+
+          let l = that.flowData.linkList.find(link => (link.sourceId == conn.sourceId&&link.targetId == conn.targetId))
+          if(l==null||l.id==null)
+          {
             id = 'link-' + ZFSN.getId();
             label = '';
-          } else if (that.flowData.status == flowConfig.flowStatus.LOADING) {
-            let l = that.flowData.linkList[that.flowData.linkList.length - 1];
+          }
+          else
+          {
             id = l.id;
             label = l.label;
           }
+
           connObj.id = id;
           o.type = 'link';
           o.id = id;
@@ -412,6 +419,7 @@
           o.sourceId = conn.sourceId;
           o.targetId = conn.targetId;
           o.label = label;
+
 
           o.cls = {
             linkType: flowConfig.jsPlumbInsConfig.Connector[0],
@@ -426,6 +434,15 @@
             let event = window.event || e;
             event.stopPropagation();
             that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0];
+            if(that.currentSelect==null)
+            {
+
+              that.$message.error('没有找到对应的线段记录！');
+            }
+            else
+            {
+              //that.$message.error('当前线段为！' + that.currentSelect);
+            }
           });
           if (that.flowData.status != flowConfig.flowStatus.LOADING) that.flowData.linkList.push(o);
         });
@@ -613,6 +630,10 @@
                   strokeWidth: link.cls.linkThickness
                 }
               });
+              let source = nodeList.find(node => (node.id == conn.sourceId));
+              let target = nodeList.find(node => (node.id == conn.targetId));
+              link.label = source.nodeName + target.nodeName;
+
               if (link.label != '') {
                 conn.setLabel({
                   label: link.label,
@@ -710,6 +731,16 @@
           let nodeList = that.flowData.nodeList;
           let linkList=that.flowData.linkList;
 
+
+        that.linkinfo = ""
+          linkList.forEach(function (conn, index) {
+            let source = nodeList.find(node => (node.id == conn.sourceId));
+            let target = nodeList.find(node => (node.id == conn.targetId));
+            let label = source.nodeDesc + source.nodeName + target.nodeName + target.nodeDesc;
+
+            that.linkinfo= that.linkinfo + "__  " +  label + "__  "
+          });
+
           if (nodeList.length <= 0) {
             this.$message.error('流程图中无任何节点！');
             return false;
@@ -738,7 +769,16 @@
               console.debug("filter2.length:" + filter2.length);
               if(filter2.length>1)
               {
-                that.$message.error('两个节点之间有超过两条连线！');
+                let link0 = filter2[0];
+                that.$message.error('两个节点之间有超过两条连线！系统自动删除一条');
+                let linkList = that.flowData.linkList;
+                let inx = linkList.findIndex(link => (link.sourceId == link0.sourceId && link.targetId == link0.targetId))
+                linkList.splice(inx , 1);
+                let conns = that.plumb.getConnections({
+                  source: link0.sourceId,
+                  target: link0.targetId
+                })
+                that.plumb.deleteConnection(conns[0]);
                 return false;
               }
 
@@ -971,7 +1011,7 @@
         that.plumb.deleteConnection(conns[0]);
 
         let linkList = that.flowData.linkList;
-        let inx = linkList.findIndex(link => (link.sourceId == sourceId || link.targetId == targetId))
+        let inx = linkList.findIndex(link => (link.sourceId == sourceId && link.targetId == targetId))
         linkList.splice(inx , 1);
         that.currentSelect = {};
       },
