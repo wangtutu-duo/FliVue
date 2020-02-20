@@ -1,5 +1,7 @@
 <template>
-  <div v-loading="loading" style="height: 100%;">
+  <div v-loading="loading" style="height: 100%;"
+       @mousedown="inside"
+       v-mousedown-outside="outside">
     <a-layout class="container">
       <a-layout-sider
         width="300"
@@ -72,6 +74,8 @@
         </a-row>
         {{linkinfo}}
         <br>
+        {{nodeinfo}}
+        <br>
         {{errorMsg}}
       </a-layout-sider>
       <a-layout>
@@ -129,6 +133,7 @@
             :selectGroup.sync="currentSelectGroup"
             :plumb="plumb"
             :currentTool="currentTool"
+            :flow-container="flowContainer()"
             @findNodeConfig="findNodeConfig"
             @selectTool="selectTool"
             @getShortcut="getShortcut"
@@ -148,7 +153,7 @@
         width="350"
         theme="light"
         class="attr-area"
-        @mousedown.stop="loseShortcut">
+        >
         <flow-attr :plumb="plumb" :flowData="flowData" :select.sync="currentSelect"></flow-attr>
       </a-layout-sider>
     </a-layout>
@@ -205,7 +210,7 @@
   import axios from '@/utils/axios.js'
 
   export default {
-    name: 'vfd',
+    name: 'flowDesigner',
     components: {
       jsplumb,
       flowConfig,
@@ -228,7 +233,7 @@
       YLaneIcon: {template: yLaneSvg},
       LanePoolIcon: {template: lanePoolSvg}
     },
-    props: {flowId: String},
+    props: {flowId: String,  },
     mounted() {
       const that = this;
       that.dealCompatibility();
@@ -270,6 +275,7 @@
           laneNodeShow: true
         },
         linkinfo:"",
+        nodeinfo:"",
         errorMsg:"",
         browserType: 3,
         plumb: {},
@@ -336,6 +342,14 @@
           this.tag.highNodeShow = true;
         }
       },
+      inside: function () {
+        console.debug(this.flowId + "focus")
+        this.listenShortcut();
+
+      },
+      outside: function () {
+        console.debug(this.flowId + "unfocus")
+      },
       toggleNodeShow3(flag) {
         if (!flag) {
           this.tag.laneNodeShow = false;
@@ -349,7 +363,7 @@
         if (isOpera) {
           return 1;
         }
-        ;
+
         if (userAgent.indexOf("Firefox") > -1) {
           return 2;
         }
@@ -392,7 +406,7 @@
 
           if (sourceId == targetId) return false;
           let filter = that.flowData.linkList.filter(link => (link.sourceId == sourceId && link.targetId == targetId));
-          if (filter.length > 0) {
+          if (filter.length > 1) {
             that.$message.error('同方向的两节点连线只能有一条！');
             return false;
           }
@@ -402,12 +416,13 @@
         that.plumb.bind('connection', function (conn, e) {
           let connObj = conn.connection.canvas;
           let o = {}, id, label, condition;
-
+          let bAdd = false;
           let l = that.flowData.linkList.find(link => (link.sourceId == conn.sourceId&&link.targetId == conn.targetId))
           if(l==null||l.id==null)
           {
             id = 'link-' + ZFSN.getId();
             label = '';
+            bAdd = true;
           }
           else
           {
@@ -441,8 +456,6 @@
               that.$message.error('当前节点异常！');
             }
 
-
-
           });
           $('#' + id).bind('click', function (e) {
             let event = window.event || e;
@@ -460,7 +473,8 @@
             }
 
           });
-          if (that.flowData.status != flowConfig.flowStatus.LOADING) that.flowData.linkList.push(o);
+          console.debug("do bind action:" + bAdd);
+          if (bAdd) that.flowData.linkList.push(o);
         });
 
         that.plumb.importDefaults({
@@ -615,6 +629,10 @@
         })
 
       },
+      flowContainer()
+      {
+        return 'contain' + ZFSN.getId();
+      },
 
       loadFlow() {
         const that = this;
@@ -646,10 +664,17 @@
                   strokeWidth: link.cls.linkThickness
                 }
               });
+              if(conn==null)
+              {
+                this.$message.error("创建连接有误")
+              }
+              else
+              {
               let source = nodeList.find(node => (node.id == conn.sourceId));
               let target = nodeList.find(node => (node.id == conn.targetId));
-              link.label = source.nodeName + target.nodeName;
 
+              link.label = source.nodeName + target.nodeName;
+              }
               if (link.label != '') {
                 conn.setLabel({
                   label: link.label,
@@ -752,11 +777,26 @@
 
 
         that.linkinfo = "连接信息："
+        that.linkinfo = that.linkinfo + linkList.length;
+
+        that.nodeinfo = "节点信息："
+        that.nodeinfo = that.nodeinfo + nodeList.length;
         that.errorMsg = ""
           linkList.forEach(function (conn, index) {
             let source = nodeList.find(node => (node.id == conn.sourceId));
             let target = nodeList.find(node => (node.id == conn.targetId));
-            let label = source.nodeDesc + source.nodeName + target.nodeName + target.nodeDesc;
+            let label = ""
+            if(source==null)
+            {
+              that.errorMsg = that.errorMsg + "连线没有找到source节点"
+            }
+            else
+              label = source.nodeDesc + source.nodeName
+            if(target==null)
+            {
+              that.errorMsg = that.errorMsg + "连线没有找到target节点"
+            }
+            else label = label + target.nodeName + target.nodeDesc;
 
             that.linkinfo= that.linkinfo + "__  " +  label + "__  "
           });
@@ -765,38 +805,36 @@
             this.$message.error('流程图中无任何节点！');
             return false;
           }
-        that.linkinfo = that.linkinfo + "========================节点错误 "
+        that.errorMsg = that.errorMsg + "========================节点错误 "
           for(let ii = 0; ii<nodeList.length; ii++) {
             let chekcNode = nodeList[ii];
             let nodeId = chekcNode.id;
             let filter0 = linkList.filter(link => (link.sourceId == nodeId||link.targetId == nodeId));
             let count0 = filter0.length;
 
-
-
-
             if (count0 == 0) {
               that.linkinfo = that.linkinfo + " " + chekcNode.nodeDesc + count0;
-              this.errorMsg = this.errorMsg + chekcNode.nodeName + chekcNode.nodeDesc;
+              that.errorMsg = that.errorMsg + chekcNode.nodeName + chekcNode.nodeDesc;
               that.$message.error('节点没有连接任何连线！');
               return false;
             }
 
+
           }
-        that.linkinfo = that.linkinfo + "========================连线错误 "
+        that.errorMsg = that.errorMsg + "========================连线错误 "
         linkList.forEach(function(link, index) {
           let filter1 = nodeList.filter(node => (link.sourceId == node.id || link.targetId == node.id));
 
           if (filter1.length == 0) {
-            this.errorMsg = this.errorMsg + link.label + link.data;
+            that.errorMsg = that.errorMsg + link.label + link.data;
             that.$message.error('联线没有连接任何节点！');
             return false;
           }
 
-          let filter2 = linkList.filter(link2 => ( link.sourceId == link2.sourceId&&link.targetId == link2.targetId));
+          let filter2 = linkList.filter(link2 => ( (link.sourceId == link2.sourceId)&&(link.targetId == link2.targetId)));
 
-          if (filter1.length >1 ) {
-            this.errorMsg = this.errorMsg + link.label + link.data;
+          if (filter2.length >1 ) {
+            that.errorMsg = that.errorMsg + link.label + link.data;
             that.$message.error('连接同样两个节点超过一条连线！');
             return false;
           }
@@ -934,24 +972,54 @@
         let nodeList = that.flowData.nodeList
         let linkList = that.flowData.linkList
 
+        this.checkFlow()
 
         arr.forEach(function(cell, index) {
-          that.plumb.remove(cell.id)
-
-          let inx = nodeList.findIndex(node => node.id == cell.id);
-          nodeList.splice(inx, 1);
 
           let inx1 = linkList.findIndex(link => (link.sourceId == cell.id || link.targetId == cell.id));
-          linkList.splice(inx1, 1);
 
-        });
-        this.loadFlow()
+          while(inx1>=0) {
+
+            let sourceId = linkList[inx1].sourceId;
+            let targetId = linkList[inx1].targetId;
+            let conns = that.plumb.getConnections({
+              source: sourceId,
+              target: targetId
+            })
+            that.plumb.deleteConnection(conns[0]);
+            linkList.splice(inx1, 1);
+            inx1 = linkList.findIndex(link => (link.sourceId == cell.id || link.targetId == cell.id));
+          }
+          let inx = nodeList.findIndex(node => node.id == cell.id);
+          nodeList.splice(inx, 1);
+          //that.plumb.remove(cell.id);
+
+
+        })
+
+
+        //this.loadFlow()
+
       },
       clear() {
         const that = this;
-        that.flowData.nodeList.forEach(function (node, index) {
-          that.plumb.remove(node.id);
-        });
+        // that.flowData.nodeList.forEach(function (node, index) {
+        //   that.plumb.remove(node.id);
+        // });
+        let nodeList = that.flowData.nodeList
+        let linkList = that.flowData.linkList
+        linkList.forEach(function(link, index) {
+
+          let sourceId = link.sourceId;
+          let targetId = link.targetId;
+          let conns = that.plumb.getConnections({
+            source: sourceId,
+            target: targetId
+          })
+          that.plumb.deleteConnection(conns[0]);
+
+        })
+
         that.currentSelect = {};
         that.currentSelectGroup = [];
         that.flowData.nodeList = [];
@@ -1006,8 +1074,10 @@
 
         let linkList = that.flowData.linkList;
         let inx = linkList.findIndex(link => (link.sourceId == sourceId && link.targetId == targetId))
-        linkList.splice(inx , 1);
+        if (inx>=0)
+          linkList.splice(inx , 1);
         that.currentSelect = {};
+
       },
       loseShortcut() {
         this.activeShortcut = false;
@@ -1058,6 +1128,9 @@
           that.plumb.repaintEverything();
         }
       }
+    },
+    watch: {
+
     }
   }
 </script>

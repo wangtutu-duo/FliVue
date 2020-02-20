@@ -2,7 +2,7 @@
 	<div style="width: 100%; height: 100%; overflow: hidden; position: relative;">
 		<div v-if="container.auxiliaryLine.isOpen && container.auxiliaryLine.isShowXLine" class="auxiliary-line-x" :style="{ top: auxiliaryLinePos.y + 'px' }"></div>
 		<div v-if="container.auxiliaryLine.isOpen && container.auxiliaryLine.isShowYLine" class="auxiliary-line-y" :style="{ left: auxiliaryLinePos.x + 'px' }"></div>
-		<div id="flowContainer" class="flow-container" 
+		<div :id="flowContainer" class="flow-container"
 			:class="{ grid: flowData.config.showGrid, zoomIn: currentTool.type == 'zoom-in', zoomOut: currentTool.type == 'zoom-out', canScale: container.scaleFlag, canDrag: container.dragFlag, canMultiple: rectangleMultiple.flag }"
 			:style="{ top: container.pos.top + 'px', left: container.pos.left + 'px', transform: 'scale(' + container.scale + ')', transformOrigin: container.scaleOrigin.x + 'px ' + container.scaleOrigin.y + 'px' }"
 			@click.stop="containerHandler" 
@@ -12,6 +12,7 @@
 			@mousewheel="scaleContainer"
 			@DOMMouseScroll="scaleContainer"
 			@contextmenu="showContainerContextMenu">
+
 			<flow-node
 				v-for="(node, index) in flowData.nodeList"
 				:key="index"
@@ -36,7 +37,7 @@
 		<div class="mouse-position">
 			x: {{ mouse.position.x }}, y: {{ mouse.position.y }}
 		</div>
-		<vue-context-menu 
+		<vue-context-menu
 			:contextMenuData="containerContextMenuData" 
 			@flowInfo="flowInfo" 
 			@paste="paste"
@@ -69,7 +70,7 @@
 	import FlowNode from './FlowNode'
 	
 	export default {
-		props: ['browserType', 'flowData', 'plumb', 'select', 'selectGroup', 'currentTool'],
+		props: ['browserType', 'flowData', 'plumb', 'select', 'selectGroup', 'currentTool','flowContainer'],
 		components: {
 			jsplumb,
 			FlowNode
@@ -102,6 +103,7 @@
 						controlFnTimesFlag: true
 					}
 				},
+
 				auxiliaryLinePos: {
 					x: 0, y: 0
 				},
@@ -131,8 +133,9 @@
 		methods: {
 			initFlowArea () {
 				const that = this;
-				that.ctx = document.getElementById('flowContainer').parentNode;
-				$('.flow-container').droppable({
+				that.ctx = document.getElementById(this.flowContainer).parentNode;
+			//	$('.flow-container').droppable({
+        $('#'+this.flowContainer).droppable({
 					accept: function(t) {
 						if (t[0].className.indexOf('node-item') != -1) {
 							let event = window.event || 'firefox';
@@ -182,7 +185,7 @@
 				
 				let event = window.event || e;
 				
-				if (event.target.id == 'flowContainer') {
+				if (event.target.id == this.flowContainer) {
 					that.mouse.position = {
 						x: event.offsetX,
 						y: event.offsetY
@@ -525,12 +528,12 @@
 				let nodeList = that.flowData.nodeList;
 				let linkList = that.flowData.linkList;
 				let arr = [];
-				
+
 				arr.push(Object.assign({}, that.currentSelect));
 
         this.$emit("flowdatachange",arr);
 
-				//that.selectContainer();
+				that.selectContainer();
 			},
 			addNewNode (node) {
 				const that = this;
@@ -682,5 +685,5 @@
 </script>
 
 <style lang="scss">
-	@import '../style/flow-area.scss'
+	@import '../style/flow-area.scss';
 </style>

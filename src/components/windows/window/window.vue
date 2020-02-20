@@ -73,7 +73,7 @@
         <div class="main-panel">
 
           {{windowMessage}}
-          <component :is="childComp" :item-id="itemId" :process-id="processId" :task-para="compPara"></component>
+          <component :is="childComp" :item-id="itemId" :process-id="processId" :task-para="compPara" ></component>
 
 
           <div class="window-overlay" :style="{display: overlayDisplay, cursor: overlayCursor}"></div>

@@ -1,5 +1,6 @@
 <template>
 	<div>
+
 		<a-tabs size="small" defaultActiveKey="flow-attr" :activeKey="activeKey">
 			<a-tab-pane key="flow-attr">
 				<span slot="tab">
@@ -37,7 +38,8 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"  />
             </a-form-item>
-					</a-form>
+            位置：Left：{{currentSelect.x}}；Top：{{currentSelect.y}}
+          </a-form>
 				</template>
 				<template v-if="currentSelect.type == 'end'">
 					<a-form layout="horizontal">
@@ -53,6 +55,7 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc" />
             </a-form-item>
+            位置：Left：{{currentSelect.x}}；Top：{{currentSelect.y}}
 					</a-form>
 				</template>
 				<template v-if="currentSelect.type == 'common'">
@@ -230,6 +233,7 @@
 				</a-form>
 			</a-tab-pane>
 		</a-tabs>
+
 	</div>
 </template>
 
