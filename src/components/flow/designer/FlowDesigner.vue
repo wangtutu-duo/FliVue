@@ -71,6 +71,8 @@
           </div>
         </a-row>
         {{linkinfo}}
+        <br>
+        {{errorMsg}}
       </a-layout-sider>
       <a-layout>
         <a-layout-header class="header-option">
@@ -268,6 +270,7 @@
           laneNodeShow: true
         },
         linkinfo:"",
+        errorMsg:"",
         browserType: 3,
         plumb: {},
         field: {
@@ -428,21 +431,34 @@
           };
           $('#' + id).bind('contextmenu', function (e) {
             that.showLinkContextMenu(e);
-            that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0];
+            let filter = that.flowData.linkList.filter(l => l.id == id)
+            if(filter.length==1)
+            {
+              that.currentSelect = filter[0]
+            }
+            else
+            {
+              that.$message.error('当前节点异常！');
+            }
+
+
+
           });
           $('#' + id).bind('click', function (e) {
             let event = window.event || e;
             event.stopPropagation();
-            that.currentSelect = that.flowData.linkList.filter(l => l.id == id)[0];
-            if(that.currentSelect==null)
+            let filter = that.flowData.linkList.filter(l => l.id == id)
+            if(filter.length==1)
             {
-
-              that.$message.error('没有找到对应的线段记录！');
+              that.currentSelect = filter[0]
             }
             else
             {
-              //that.$message.error('当前线段为！' + that.currentSelect);
+              that.$message.error('当前节点异常！');
+
+
             }
+
           });
           if (that.flowData.status != flowConfig.flowStatus.LOADING) that.flowData.linkList.push(o);
         });
@@ -685,6 +701,9 @@
           case 'zoom-out':
             this.changeToZoomOut();
             break;
+          case 'check':
+            this.checkFlow();
+            break;
         }
       },
       changeToDrag() {
@@ -732,7 +751,8 @@
           let linkList=that.flowData.linkList;
 
 
-        that.linkinfo = ""
+        that.linkinfo = "连接信息："
+        that.errorMsg = ""
           linkList.forEach(function (conn, index) {
             let source = nodeList.find(node => (node.id == conn.sourceId));
             let target = nodeList.find(node => (node.id == conn.targetId));
@@ -745,70 +765,44 @@
             this.$message.error('流程图中无任何节点！');
             return false;
           }
-          for(let ii = 0; ii<nodeList.length; ii++)
-          {
+        that.linkinfo = that.linkinfo + "========================节点错误 "
+          for(let ii = 0; ii<nodeList.length; ii++) {
             let chekcNode = nodeList[ii];
             let nodeId = chekcNode.id;
-            let filter0 = linkList.filter(link => (link.sourceId == nodeId || link.targetId == nodeId));
+            let filter0 = linkList.filter(link => (link.sourceId == nodeId||link.targetId == nodeId));
+            let count0 = filter0.length;
 
-            if (filter0.length == 0) {
+
+
+
+            if (count0 == 0) {
+              that.linkinfo = that.linkinfo + " " + chekcNode.nodeDesc + count0;
+              this.errorMsg = this.errorMsg + chekcNode.nodeName + chekcNode.nodeDesc;
               that.$message.error('节点没有连接任何连线！');
               return false;
             }
-            let filter1 = linkList.filter(link => (link.sourceId == nodeId));
-
-            console.debug("filter1.length:" + filter1.length);
-            for(let ii=0; ii<filter1.length; ii++)
-            {
-
-              let checkLink = filter1[ii];
-              console.debug("checklink:" + checkLink);
-              let sourceId = checkLink.sourceId;
-              let targetId = checkLink.targetId;
-              let filter2 = filter1.filter(link => (link.sourceId == sourceId && link.targetId == targetId));
-              console.debug("filter2.length:" + filter2.length);
-              if(filter2.length>1)
-              {
-                let link0 = filter2[0];
-                that.$message.error('两个节点之间有超过两条连线！系统自动删除一条');
-                let linkList = that.flowData.linkList;
-                let inx = linkList.findIndex(link => (link.sourceId == link0.sourceId && link.targetId == link0.targetId))
-                linkList.splice(inx , 1);
-                let conns = that.plumb.getConnections({
-                  source: link0.sourceId,
-                  target: link0.targetId
-                })
-                that.plumb.deleteConnection(conns[0]);
-                return false;
-              }
-
-            }
 
           }
+        that.linkinfo = that.linkinfo + "========================连线错误 "
+        linkList.forEach(function(link, index) {
+          let filter1 = nodeList.filter(node => (link.sourceId == node.id || link.targetId == node.id));
 
-          for(let ii = 0; ii<linkList.length; ii++)
-          {
-            let chekcLink = linkList[ii];
-            let sourceId = chekcLink.sourceId;
-            let targetId = chekcLink.targetId;
-            let filter = nodeList.filter(node => (node.id == sourceId || node.id == targetId));
-
-            if (filter.length == 0) {
-              that.$message.error('联线没有连接任何节点！');
-              return false;
-            }
-            else if(filter.length == 1)
-            {
-              that.$message.error('联线只连接一个节点！需要连接两个节点');
-              return false;
-            }
-            else if (filter.length > 2)
-            {
-              that.$message.error('两个节点之间连线超过两条！需要删除其中一条');
-              return false;
-            }
-
+          if (filter1.length == 0) {
+            this.errorMsg = this.errorMsg + link.label + link.data;
+            that.$message.error('联线没有连接任何节点！');
+            return false;
           }
+
+          let filter2 = linkList.filter(link2 => ( link.sourceId == link2.sourceId&&link.targetId == link2.targetId));
+
+          if (filter1.length >1 ) {
+            this.errorMsg = this.errorMsg + link.label + link.data;
+            that.$message.error('连接同样两个节点超过一条连线！');
+            return false;
+          }
+
+        });
+
 
           return true;
 

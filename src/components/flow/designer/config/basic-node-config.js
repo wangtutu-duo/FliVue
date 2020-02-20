@@ -18,7 +18,12 @@ export const tools = [
 		type: 'zoom-out',
 		icon: 'zoom-out',
 		name: '缩小'
-	}
+	},
+  {
+    type: 'check',
+    icon: 'zoom-out',
+    name: '检查'
+  }
 ];
 
 export const commonNodes = [
@@ -38,8 +43,14 @@ export const commonNodes = [
 		type: 'common', 
 		nodeName: '',
 		icon: 'CommonIcon',
-    nodeDesc:'人工节点'
+    nodeDesc:'人工必做'
 	},
+  {
+    type: 'option',
+    nodeName: '',
+    icon: 'CommonIcon',
+    nodeDesc:'人工可选'
+  },
 	{
 		type: 'auto',
 		nodeName: '',
@@ -74,7 +85,14 @@ export const highNodes = [
 		nodeName: 'CHILD',
 		icon: 'ChildFlowIcon',
     nodeDesc: '子流程',
+  },
+  {
+    type: 'mark',
+    nodeName: 'MARK',
+    icon: 'ChildFlowIcon',
+    nodeDesc: '备注',
   }
+
 ];
 
 export const laneNodes = [

@@ -73,7 +73,7 @@
         <div class="main-panel">
 
           {{windowMessage}}
-          <component :is="childComp" :item-id="itemId" :process-id="processId" :task-para="taskPara"></component>
+          <component :is="childComp" :item-id="itemId" :process-id="processId" :task-para="compPara"></component>
 
 
           <div class="window-overlay" :style="{display: overlayDisplay, cursor: overlayCursor}"></div>
@@ -121,6 +121,7 @@
         compChild: {name: "", control: {}, para: {}},
         wndInfo: {},
         taskInfo: {},
+        compPara:this.taskPara,
         minWidth: 190,
         minHeight: 46,
         iconImage: null,
@@ -171,6 +172,7 @@
         this.windowStyle.width = this.wndInfo.rect.w + "px";
         this.windowStyle.height = this.wndInfo.rect.h + "px";
         this.windowStyle.zIndex = this.wndInfo.zIndex;
+
         this.winType = this.wndInfo.winType;
       } else {
         this.title = "建设中，勿操作"
@@ -182,7 +184,10 @@
         this.source = "components/windows/folder/folder.vue"
       } else if (this.taskInfo.madeBy == "component")
         this.source = this.taskInfo.source;
-
+      if(this.taskInfo&&this.taskInfo.taskPara) {
+        if (this.compPara == null)
+          this.compPara = this.taskInfo.taskPara;
+      }
       let name = this.source
       this.compChild.name = name
       this.compChild.para = {childId: this.itemId}

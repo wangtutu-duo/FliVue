@@ -530,9 +530,6 @@
 
         this.$emit("flowdatachange",arr);
 
-
-
-
 				//that.selectContainer();
 			},
 			addNewNode (node) {
