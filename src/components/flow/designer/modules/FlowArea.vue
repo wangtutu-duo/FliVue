@@ -149,9 +149,7 @@
 
 		methods: {
 
-      copyMenu(obj) {
 
-      },
 			initFlowArea () {
 				const that = this;
 
