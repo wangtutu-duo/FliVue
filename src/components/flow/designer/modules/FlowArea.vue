@@ -68,7 +68,7 @@
 	import 'jquery-ui/ui/widgets/resizable'
 	import { ZFSN } from '../util/ZFSN.js'
 	import FlowNode from './FlowNode'
-	
+
 	export default {
 		props: ['browserType', 'flowData', 'plumb', 'select', 'selectGroup', 'currentTool','flowContainer'],
 		components: {
@@ -125,14 +125,36 @@
 					width: 0
 				},
 				containerContextMenuData: flowConfig.contextMenu.container,
-				nodeContextMenuData: flowConfig.contextMenu.node,
+				nodeContextMenuData:flowConfig.contextMenu.node,
 				tempLinkId: '',
 				clipboard: []
 			}
 		},
+    created()
+    {
+      let m1 = {};
+      m1["menuName"] =  "C" + this.flowContainer;
+      m1["axis"] = flowConfig.contextMenu.container.axis;
+      m1["menulists"] = flowConfig.contextMenu.container.menulists;
+
+      this.containerContextMenuData = m1;
+
+      let m2 = {};
+      m2["menuName"] =  "N" + this.flowContainer;
+      m2["axis"] = flowConfig.contextMenu.container.axis;
+      m2["menulists"] = flowConfig.contextMenu.node.menulists;
+     this.nodeContextMenuData=m2;
+
+    },
+
 		methods: {
+
+      copyMenu(obj) {
+
+      },
 			initFlowArea () {
 				const that = this;
+
 				that.ctx = document.getElementById(this.flowContainer).parentNode;
 			//	$('.flow-container').droppable({
         $('#'+this.flowContainer).droppable({
