@@ -78,7 +78,7 @@
   import JsonView from 'vue-json-viewer'
 
   export default {
-    name: "flowInquire",
+    name: "mytasks",
     components: {Wbutton, Wedit, JsonView},
     props:
       {
@@ -130,6 +130,13 @@
             title: '进程状态',
             dataIndex: 'flowStatus',
           },
+          {
+            title: '操作',
+            key: 'operation',
+            fixed: 'right',
+            width: 100,
+
+          },
         ],
         flowName: "flowBasic1",
         processId: "",
@@ -143,12 +150,16 @@
       inquireFlow() {
 
         this.loading = true;
+        let filter = {
+          flowStatus:{in:["create","open"]}
+        }
         let flow = {
           flowFirmId: "defalut",
           flowAppId: "defalut",
           flowName: this.flowName,
           flowProcId: this.processId,
           flowAction: "flowInquire",
+          filter:filter,
           currentPage: 1,
           pageSize: 10
         }

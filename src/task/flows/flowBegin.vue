@@ -30,7 +30,9 @@
         <a-table bordered
                  :dataSource="dataSource"
                  :columns="columns"
-                 :pagination="pagination">
+                 :pagination="pagination"
+                 :scroll="{ x: 1500 }"
+                 size="middle">
           <template slot="fldValue" slot-scope="text, record">
             <editable-cell :text="text" @change="onCellChange(record.key, 'fldValue', $event)"/>
           </template>
@@ -158,7 +160,10 @@
             this.$message.error(data.errorMessage)
           }
           this.loading = false;
-        })
+        }).catch((data)=>{
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
 
       },
 
