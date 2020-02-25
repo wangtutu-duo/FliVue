@@ -1,7 +1,7 @@
 <template>
-  <div  >
-    <el-container>
-      <el-main>
+  <div style="height: 100%" >
+    <a-layout style="height: 100%">
+      <a-layout-content style="padding: 0 50px; height: 100%">
 
         <notifybar></notifybar>
         <folder item-id = "root"></folder>
@@ -16,12 +16,12 @@
           :taskPara="app.taskPara"
         >
         </windows>
-      </el-main>
-      <el-footer>
+      </a-layout-content>
+      <a-layout-footer>
         <taskbar></taskbar>
-      </el-footer>
+      </a-layout-footer>
 
-    </el-container>
+    </a-layout>
   </div>
 </template>
 

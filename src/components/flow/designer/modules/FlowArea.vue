@@ -141,7 +141,7 @@
 
       let m2 = {};
       m2["menuName"] =  "N" + this.flowContainer;
-      m2["axis"] = flowConfig.contextMenu.container.axis;
+      m2["axis"] = flowConfig.contextMenu.node.axis;
       m2["menulists"] = flowConfig.contextMenu.node.menulists;
      this.nodeContextMenuData=m2;
 

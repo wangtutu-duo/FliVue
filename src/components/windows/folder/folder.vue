@@ -2,44 +2,52 @@
   <div
     class="grid-body" tabindex="0"
   >
-    <v-contextmenu ref="contextmenu" :theme="theme" v-show="bMenuVisible">
-      <v-contextmenu-item @click="newFolder">新增功能夹</v-contextmenu-item>
-      <v-contextmenu-item @click="newModule">新增功能</v-contextmenu-item>
-      <v-contextmenu-item @click="newTask">新增任务</v-contextmenu-item>
-      <v-contextmenu-item @click="needHelp">帮助</v-contextmenu-item>
-    </v-contextmenu>
 
-    <div class="icon-grid" >
-      <items  v-for="(itemId, index) in folderItems" :item-id = "itemId"
-              :key="index">
+    <vue-context-menu
+      :contextMenuData="foderMenuData">
+    </vue-context-menu>
 
-      </items>
+    <vue-context-menu
+      :contextMenuData="itemMenuData">
+    </vue-context-menu>
+
+
+    <div @contextmenu="showFolderMenu">
+      <div class="icon-grid">
+        <items v-for="(itemId, index) in folderItems" :item-id="itemId"
+               :key="index"
+               @showItemContextMenu="showItemMenu">
+
+        </items>
+      </div>
+      <div class="selection" ref="selection" v-show="selectionDisplay" :style="selectionArea"></div>
     </div>
-    <div class="selection" ref="selection" v-show="selectionDisplay" :style="selectionArea"></div>
-
 
   </div>
 </template>
 <script>
   import store from '../../../store/index'
   import items from './items.vue'
+  import {flidConfig} from '@/store/flidConfig.js'
+  import $ from 'jquery'
+
   export default {
-    name:"folder",
+    name: "folder",
     components: {
       items: items,
     },
     props: {
       itemId: String,
 
-      compara:String,
+      compara: String,
 
     },
     data() {
       return {
-        folderId:String,
+        folderId: String,
         folderItems: null,
-        test:null,
-        bMenuVisible:false,
+        test: null,
+        bMenuVisible: false,
         selectionArea: {
           width: '0',
           height: '0',
@@ -47,7 +55,9 @@
           left: '0'
         },
         selectionDisplay: false,
-        theme: null
+        theme: null,
+        foderMenuData: flidConfig.contextMenu.folder,
+        itemMenuData: flidConfig.contextMenu.item
       }
     },
     created: function () {
@@ -55,19 +65,40 @@
       this.getFolderItems()
     },
     methods: {
-      getFolderItems()
-      {
-        if(this.folderId==null)
-        {
+
+      showFolderMenu(e) {
+        let event = window.event || e;
+
+        event.preventDefault();
+        $('.vue-contextmenuName-folder-menu').css('display', 'none');
+        $('.vue-contextmenuName-item-menu').css('display', 'none');
+
+        let x = event.clientX;
+        let y = event.clientY;
+        this.foderMenuData.axis = {x, y};
+
+      },
+      showItemMenu(e) {
+        let event = window.event || e;
+
+        event.preventDefault();
+        $('.vue-contextmenuName-item-menu').css('display', 'none');
+        $('.vue-contextmenuName-folder-menu').css('display', 'none');
+        let x = event.clientX;
+        let y = event.clientY;
+        this.itemMenuData.axis = {x, y};
+      },
+      getFolderItems() {
+        if (this.folderId == null) {
           return;
         }
-        let info = { paraType: "getMenuPara", folderId:this.folderId}
+        let info = {paraType: "getMenuPara", folderId: this.folderId}
         store.dispatch("info/getFolderInfoAct", info).then((data1) => {
 
           console.debug(data1)
-          this.folderItems =  data1;
+          this.folderItems = data1;
         });
-        info = { paraType: "getTaskPara", taskId:this.folderId}
+        info = {paraType: "getTaskPara", taskId: this.folderId}
         store.dispatch("info/getTaskInfoAct", info).then((data2) => {
           //let a = store.info.getters.getList;
           console.debug(data2)
@@ -91,8 +122,7 @@
       {
 
 
-        folderId(newVal, oldVal)
-        {
+        folderId(newVal, oldVal) {
           this.getFolderItems()
         }
       }

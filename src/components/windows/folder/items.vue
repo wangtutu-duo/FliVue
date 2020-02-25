@@ -1,12 +1,8 @@
 <template xmlns:v-contextmenu="http://www.w3.org/1999/xhtml">
   <div >
-    <v-contextmenu ref="contextmenu" :theme="theme">
-      <v-contextmenu-item @click="handleClick">菜单1</v-contextmenu-item>
-      <v-contextmenu-item @click="handleClick">菜单2</v-contextmenu-item>
-      <v-contextmenu-item @click="handleClick">菜单3</v-contextmenu-item>
-    </v-contextmenu>
 
-    <div  :class="['box', theme]" v-contextmenu:contextmenu @dblclick="openWnd">
+
+    <div  :class="['box', theme]" @contextmenu.stop="showItemContextMenu" @dblclick="openWnd">
 
       <i class="icon-image">
         <img :src="iconImages(iconImage)" alt="icon">
@@ -94,6 +90,10 @@
     methods: {
 
       handleClick(){},
+      showItemContextMenu(e) {
+        this.$emit('showItemContextMenu', e);
+
+      },
       openWnd: function() {
 
         console.log("click icon");
@@ -103,7 +103,8 @@
         this.iconFocused = false
       },
       iconImages: require.context('../../../assets/', true, /\.png$/)
-    }
+    },
+
   }
 </script>
 

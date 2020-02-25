@@ -2,18 +2,13 @@ import axios from '@/utils/axios.js'
 
 const state = {
   count: 0,
-
-
 }
-
 
 const mutations = {
   DOTASK: (state, data) => {
 
     state.token = data;
     window.sessionStorage.setItem('token', data);
-    console.debug("ddddd")
-
 
   }
 

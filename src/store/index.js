@@ -4,7 +4,7 @@ import task from "./task.js"
 import user from "./user.js"
 import wins from "./wins.js"
 import info from "./info.js"
-
+import flow from "./flow.js"
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -14,6 +14,6 @@ export default new Vuex.Store({
   },
   mutations: {},
   actions :{  },
-  modules: {task,user,wins,info}
+  modules: {task,user,wins,info,flow}
 }
 );

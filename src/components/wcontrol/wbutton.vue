@@ -1,8 +1,8 @@
 <template>
   <div v-loading="loading">
-    <el-button type="primary" size="mini" @click="doTask">
+    <a-button   @click="doTask">
       <slot></slot>
-    </el-button>
+    </a-button>
   </div>
 </template>
 

@@ -123,6 +123,9 @@
           <a-tooltip title="退出" placement="bottom">
             <a-button @click="exit" class="header-option-button" size="small" icon="logout"></a-button>
           </a-tooltip>
+          <a-tooltip title="字段" placement="bottom">
+            <a-button @click="exit" class="header-option-button" size="small" icon="logout"></a-button>
+          </a-tooltip>
         </a-layout-header>
         <a-layout-content class="content">
           <flow-area
@@ -291,7 +294,9 @@
           attr: {
             id: '',
             name: 'flow',
-            desc: '流程图'
+            desc: '流程图',
+            version:'1.0',
+
           },
           config: {
             showGrid: true,
@@ -318,6 +323,14 @@
           maskClosable: false
         }
       }
+    },
+    created()
+    {
+      let m1 = {};
+      m1["menuName"] =  "F" + ZFSN.getId();
+      m1["axis"] = flowConfig.contextMenu.link.axis;
+      m1["menulists"] = flowConfig.contextMenu.link.menulists;
+      this.linkContextMenuData = m1;
     },
     methods: {
 
@@ -673,7 +686,7 @@
               let source = nodeList.find(node => (node.id == conn.sourceId));
               let target = nodeList.find(node => (node.id == conn.targetId));
 
-              link.label = source.nodeName + target.nodeName;
+              //link.label = source.nodeName + target.nodeName;
               }
               if (link.label != '') {
                 conn.setLabel({
@@ -796,7 +809,10 @@
             {
               that.errorMsg = that.errorMsg + "连线没有找到target节点"
             }
-            else label = label + target.nodeName + target.nodeDesc;
+            else
+            {
+              label = label + target.nodeName + target.nodeDesc;
+            }
 
             that.linkinfo= that.linkinfo + "__  " +  label + "__  "
           });

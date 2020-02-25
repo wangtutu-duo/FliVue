@@ -1,4 +1,7 @@
 <template>
+  <div>
+  <a-layout id="components-layout-demo-top" class="layout">
+
   <div
     class="window-body"
     :class="{
@@ -33,7 +36,6 @@
         @mousedown="dragStart('w-resize',  $event)"
         @touchstart="dragStart('w-resize',  $event)"
       ></div>
-
 
       <div class="window-frame">
         <div class="title-bar">
@@ -90,6 +92,10 @@
       <div class="border-se" @mousedown="dragStart('se-resize', $event)"
            @touchstart="dragStart('se-resize', $event)"></div>
     </div>
+  </div>
+    </a-layout >
+
+
   </div>
 </template>
 

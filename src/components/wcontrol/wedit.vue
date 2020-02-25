@@ -1,6 +1,6 @@
 <template>
 
-  <el-input v-model="value" :placeholder="inputHint"></el-input>
+  <a-input v-model="value" :placeholder="inputHint"></a-input>
 
 </template>
 
