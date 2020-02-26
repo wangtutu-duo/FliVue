@@ -13,16 +13,16 @@
               <wedit v-model="processDesc" input-hint="本次发起流程描述"></wedit>
             </a-col>
             <a-col :span="5">
-              <wbutton @click="beginFlow1">通过流程名称发起流程</wbutton>
+              <a-button @click="beginFlow">生成流程流水号</a-button>
             </a-col>
           </a-row>
           <a-row>
-            <a-col :span="5">请输入进程号</a-col>
+            <a-col :span="5">流程流水号</a-col>
             <a-col :span="7">
-              <wedit v-model="processId"></wedit>
+              <wedit v-model="flowRefNo"></wedit>
             </a-col>
             <a-col :span="7">
-              <wbutton @click="beginFlow2">通过进程号发起流程</wbutton>
+              <a-button :disabled="disableCommit" @click="commitFlow">提交流程</a-button>
             </a-col>
           </a-row>
 
@@ -31,7 +31,7 @@
                  :dataSource="dataSource"
                  :columns="columns"
                  :pagination="pagination"
-                 :scroll="{ x: 1500 }"
+
                  size="middle">
           <template slot="fldValue" slot-scope="text, record">
             <editable-cell :text="text" @change="onCellChange(record.key, 'fldValue', $event)"/>
@@ -90,10 +90,11 @@
       return {
         flowId: "",
         loading: false,
+        disableCommit:true,
         flowName: "flowBasic1",
         inJsonData:{},
         outJsonData:{},
-        processId: null,
+        flowRefNo: null,
         processDesc: "用户新增2019",
         pagination: {
           total: 0,
@@ -137,7 +138,7 @@
       };
     },
     methods: {
-      beginFlow1() {
+      beginFlow() {
         this.loading = true;
         if (this.flowName.length == 0 || this.processDesc.length == 0) {
           this.$message.error("请输入流程名及本次进程描述")
@@ -145,17 +146,19 @@
           return
         }
         let flow = {
-          flowFirmId: "defalut",
-          flowAppId: "defalut",
+          //flowFirmId: "defalut",
+          //flowAppId: "defalut",
           flowName: this.flowName,
           flowProcDesc: this.processDesc,
           flowAction: "flowBegin"
         }
         this.inJsonData = flow
         axios.dealFlow(flow).then(({data}) => {
+          this.outJsonData = data
           if (data.isSuccess) {
-            this.processId = data.flowProcessId
-            this.outJsonData = data
+            this.flowRefNo = data.flowRefNo
+            this.disableCommit = false;
+            this.$message.success(data.okMessage)
           } else {
             this.$message.error(data.errorMessage)
           }
@@ -167,32 +170,35 @@
 
       },
 
-
-      beginFlow2() {
+      commitFlow() {
         this.loading = true;
-        if (this.flowName.length == 0 || this.processDesc.length == 0) {
-          this.$message.error("请输入流程名及本次进程描述")
+        if (!this.flowRefNo) {
+          this.$message.error("请先生成流程流水号")
           this.loading = false;
           return
         }
         let flow = {
-          flowFirmId: "defalut",
-          flowAppId: "defalut",
-          flowProcId: this.processId,
-          flowName: this.flowName,
+          //flowFirmId: "defalut",
+          //flowAppId: "defalut",
+          flowRefNo: this.flowRefNo,
+
           //flowProcDesc: this.processDesc,
-          flowAction: "flowBegin"
+          flowAction: "flowCommit"
         }
         this.inJsonData = flow
         axios.dealFlow(flow).then(({data}) => {
+          this.outJsonData = data
           if (data.isSuccess) {
-            this.processId = data.flowProcId
-            this.outJsonData = data
+            this.$message.success(data.okMessage)
+            this.disableCommit = true;
           } else {
             this.$message.error(data.errorMessage)
           }
           this.loading = false;
-        })
+        }).catch((data)=>{
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
 
       },
       onCellChange(key, dataIndex, value) {

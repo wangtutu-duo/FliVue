@@ -10,8 +10,11 @@
               <a-col :span="7">
                 <wedit v-model="flowName" input-hint="请输入流程名称"></wedit>
               </a-col>
-              <a-col :span="10">
+              <a-col :span="5">
                 <wbutton @click="inquireProcess">查询进程</wbutton>
+              </a-col>
+              <a-col :span="5">
+                <wbutton @click="deleteProcess">删除进程</wbutton>
               </a-col>
             </a-row>
 
@@ -20,8 +23,10 @@
                      rowKey="flowProcId"
                      :dataSource="dataProc"
                      :columns="colProc"
-                     :pagination = "pagination"
-            >
+                     :pagination="pagination"
+                     :rowSelection="rowSelection">
+              <a slot="flowProcId" slot-scope="text" href="javascript:;">{{text}}</a>
+              >
 
             </a-table>
 
@@ -84,13 +89,14 @@
         dataProc: null,
         pagination:
           {
-            total:0,
-            pageSize:10,
+            total: 0,
+            pageSize: 10,
           },
         colProc: [
           {
             title: '进程ID',
             dataIndex: 'flowProcId',
+            scopedSlots: {customRender: 'flowProcId'},
           },
           {
             title: '进程描述',
@@ -109,13 +115,16 @@
             title: '流程版本',
             dataIndex: 'flowVersion',
           },
-
+          {
+            title: '进程创建时间',
+            dataIndex: 'flowProcCreate',
+          },
           {
             title: '进程开始时间',
             dataIndex: 'flowProcBegin',
           },
           {
-            title: '进程开始时间',
+            title: '进程结束时间',
             dataIndex: 'flowProcEnd',
           },
           {
@@ -129,19 +138,49 @@
         inJsonData: {},
         outJsonData: {},
         loading: false,
-        total:0,
-        pageSize:10,
+        total: 0,
+        pageSize: 10,
+        selectProc:null
 
       }
 
     },
     methods: {
+      deleteProcess() {
+
+        this.loading = true;
+        let aa = this.selectProc;
+        let filter = {
+          flowProcId: {in: this.selectProc}
+        }
+
+        let proc = {
+          flowAction: "procDelete",
+          filter: filter,
+        }
+        this.inJsonData = proc
+        axios.dealFlow(proc).then(({data}) => {
+          if (data.isSuccess) {
+
+            this.outJsonData = data
+
+          } else {
+            this.$message.error(data.errorMessage)
+          }
+          this.loading = false;
+        }).catch((data) => {
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
+
+
+      },
       inquireProcess() {
 
         this.loading = true;
         let proc = {
-          flowFirmId: "defalut",
-          flowAppId: "defalut",
+          //flowFirmId: "defalut",
+          //flowAppId: "defalut",
           flowName: this.flowName,
           flowAction: "procInquire",
           currentPage: 1,
@@ -157,11 +196,34 @@
             this.$message.error(data.errorMessage)
           }
           this.loading = false;
-        })
+        }).catch((data) => {
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
 
-      },
+      }
+      ,
     },
-  };
+    computed: {
+      rowSelection() {
+        const {selectedRowKeys} = this;
+        return {
+          onChange: (selectedRowKeys, selectedRows) => {
+            this.selectProc = selectedRowKeys;
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+          },
+          getCheckboxProps: record => ({
+            props: {
+              disabled: record.flowProcStatus === 'begin', // Column configuration not to be checked
+              name: record.flowProcId,
+            },
+          }),
+        };
+      }
+      ,
+    }
+  }
+  ;
 </script>
 <style>
   .editable-cell {

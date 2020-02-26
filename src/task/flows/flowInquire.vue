@@ -144,8 +144,8 @@
 
         this.loading = true;
         let flow = {
-          flowFirmId: "defalut",
-          flowAppId: "defalut",
+          //flowFirmId: "defalut",
+          //flowAppId: "defalut",
           flowName: this.flowName,
           flowProcId: this.processId,
           flowAction: "flowInquire",

@@ -312,6 +312,7 @@
           name: '拖拽'
         },
         loading: false,
+        focus:false,
         currentSelect: {},
         currentSelectGroup: [],
         activeShortcut: true,
@@ -356,11 +357,13 @@
         }
       },
       inside: function () {
-        console.debug(this.flowId + "focus")
+        this.focus = true;
         this.listenShortcut();
 
       },
       outside: function () {
+        this.focus = false;
+        this.listenShortcut();
         console.debug(this.flowId + "unfocus")
       },
       toggleNodeShow3(flag) {
@@ -513,6 +516,13 @@
       },
       listenShortcut() {
         const that = this;
+        if(!this.focus)
+        {
+          document.onkeydown =null;
+          document.onkeyup = null;
+          return;
+        }
+
         document.onkeydown = function (e) {
           let event = window.event || e;
 

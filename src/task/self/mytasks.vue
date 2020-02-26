@@ -2,6 +2,17 @@
   <div style="height:100%" v-loading="loading">
     <div class="card-container">
 
+      <a-modal
+        title="输入提交数据"
+
+        style="top: 100px;width:800px"
+        :visible="modal1Visible"
+        @ok="() => submit()"
+        @cancel="() => cancel()"
+      >
+        <user-data></user-data>
+      </a-modal>
+
       <a-tabs type="card">
         <a-tab-pane tab="手工处理" key="hand">
           <div>
@@ -23,12 +34,14 @@
             <a-table bordered
                      :dataSource="dataFlow"
                      :columns="colFlow"
-                     :pagination = "pagination"
+                     :pagination="pagination"
                      rowKey="flowRefNo"
                      :scroll="{ x: 1500 }"
                      size="middle"
             >
-
+              <template slot="operation" slot-scope="text, record">
+                <wbutton @click="prepareTask(record.flowRefNo)">执行</wbutton>
+              </template>
             </a-table>
 
 
@@ -73,13 +86,14 @@
 <script>
 
   import Wedit from "../../components/wcontrol/wedit";
+  import userData from "./userData";
   import Wbutton from "../../components/wcontrol/wbutton";
   import axios from '@/utils/axios.js'
   import JsonView from 'vue-json-viewer'
 
   export default {
     name: "mytasks",
-    components: {Wbutton, Wedit, JsonView},
+    components: {Wbutton, Wedit, JsonView, userData},
     props:
       {
         itemId: String,
@@ -88,10 +102,12 @@
     data() {
       return {
         dataFlow: null,
+        modal1Visible: false,
+        flowRefNo:null,
         pagination:
           {
-            total:0,
-            pageSize:10,
+            total: 0,
+            pageSize: 10,
           },
         colFlow: [
           {
@@ -134,7 +150,8 @@
             title: '操作',
             key: 'operation',
             fixed: 'right',
-            width: 100,
+            width: 80,
+            scopedSlots: {customRender: 'operation'},
 
           },
         ],
@@ -147,19 +164,46 @@
 
     },
     methods: {
+      setModal1Visible(modal1Visible) {
+        this.modal1Visible = modal1Visible;
+      },
+      prepareTask(flowRefNo) {
+
+        this.loading = true;
+        this.flowRefNo = flowRefNo;
+        let flow = {
+          flowRefNo: flowRefNo,
+          flowAction: "flowBegin",
+          flowCheck: "false",
+        }
+        this.inJsonData = flow
+        axios.dealFlow(flow).then(({data}) => {
+          if (data.isSuccess) {
+            this.outJsonData = data
+            this.setModal1Visible(true);
+          } else {
+            this.$message.error(data.errorMessage)
+          }
+          this.loading = false;
+        }).catch((data) => {
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
+      },
       inquireFlow() {
 
         this.loading = true;
         let filter = {
-          flowStatus:{in:["create","open"]}
+          flowStatus: {in: ["create", "open", "begin"]}
         }
         let flow = {
-          flowFirmId: "defalut",
-          flowAppId: "defalut",
+          //flowFirmId: "defalut",
+          //flowAppId: "defalut",
           flowName: this.flowName,
           flowProcId: this.processId,
           flowAction: "flowInquire",
-          filter:filter,
+
+          filter: filter,
           currentPage: 1,
           pageSize: 10
         }
@@ -173,9 +217,60 @@
             this.$message.error(data.errorMessage)
           }
           this.loading = false;
-        })
+        }).catch((data) => {
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
 
       },
+      submit() {
+        this.loading = true;
+
+        let flow = {
+
+          flowRefNo: this.flowRefNo,
+          flowAction: "flowCommit",
+
+        }
+        this.inJsonData = flow
+        axios.dealFlow(flow).then(({data}) => {
+          if (data.isSuccess) {
+
+            this.outJsonData = data
+            this.setModal1Visible(false)
+          } else {
+            this.$message.error(data.errorMessage)
+          }
+          this.loading = false;
+        }).catch((data) => {
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
+      },
+      cancel() {
+        this.setModal1Visible(false)
+        this.loading = true;
+
+        let flow = {
+          flowRefNo: this.flowRefNo,
+          flowAction: "flowCancel",
+
+        }
+        this.inJsonData = flow
+        axios.dealFlow(flow).then(({data}) => {
+          if (data.isSuccess) {
+            this.outJsonData = data
+
+          } else {
+            this.$message.error(data.errorMessage)
+          }
+          this.loading = false;
+        }).catch((data) => {
+          this.loading = false;
+          this.$message.error("访问后台错误")
+        });
+      }
+
     },
   };
 </script>
