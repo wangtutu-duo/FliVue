@@ -10,7 +10,7 @@
               <wedit v-model="flowName"></wedit>
             </a-col>
             <a-col :span="7">
-              <wedit v-model="processDesc" input-hint="本次发起流程描述"></wedit>
+              <wedit v-model="flowDesc" input-hint="本次发起流程描述"></wedit>
             </a-col>
             <a-col :span="5">
               <a-button @click="beginFlow">生成流程流水号</a-button>
@@ -95,7 +95,7 @@
         inJsonData:{},
         outJsonData:{},
         flowRefNo: null,
-        processDesc: "用户新增2019",
+        flowDesc: "用户新增2019",
         pagination: {
           total: 0,
           pageSize: 100,
@@ -140,7 +140,7 @@
     methods: {
       beginFlow() {
         this.loading = true;
-        if (this.flowName.length == 0 || this.processDesc.length == 0) {
+        if (this.flowName.length == 0 || this.flowDesc.length == 0) {
           this.$message.error("请输入流程名及本次进程描述")
           this.loading = false;
           return
@@ -149,7 +149,7 @@
           //flowFirmId: "defalut",
           //flowAppId: "defalut",
           flowName: this.flowName,
-          flowProcDesc: this.processDesc,
+          flowDesc: this.flowDesc,
           flowAction: "flowBegin"
         }
         this.inJsonData = flow
@@ -182,7 +182,7 @@
           //flowAppId: "defalut",
           flowRefNo: this.flowRefNo,
 
-          //flowProcDesc: this.processDesc,
+          //flowProcDesc: this.flowDesc,
           flowAction: "flowCommit"
         }
         this.inJsonData = flow

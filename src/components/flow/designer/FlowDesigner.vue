@@ -299,7 +299,7 @@
             name: 'flow',
             desc: '流程图',
             version: '1.0',
-            status: "creating" // using   other
+            status: "released" // creating   released, other
           },
           config: {
             showGrid: true,
@@ -607,7 +607,7 @@
       },
       loadFlowData() {
         const that = this;
-        let flowName = this.flowId;
+        let flowName = this.flowName;
         that.loading = true;
         that.clear();
 
@@ -615,9 +615,8 @@
         let model =
           {
             modelId: this.flowId,
-            //modelName: this.flowName,
-            modelName: this.flowId,
-            modelStatus: "creating",
+            modelName: this.flowName,
+            modelStatus: "released",
             modelAction:"inquireModelFirst"
           }
         axios.dealFlowModel(model).then(({data}) => {
@@ -625,9 +624,9 @@
               this.$message.success(data.okMessage);
 
               if (data.modelData) {
-                let loadData = data.info;
-                that.flowData.attr = data.info.attr;
-                that.flowData.config = data.info.config;
+                let loadData = data.modelData;
+                that.flowData.attr = loadData.attr;
+                that.flowData.config = loadData.config;
                 that.flowData.status = flowConfig.flowStatus.LOADING;
                 let nodeList = loadData.nodeList;
                 nodeList.forEach(function (node, index) {
@@ -644,7 +643,7 @@
                 that.flowData.attr.name = flowName;
                 that.flowData.attr.desc = '工作流模型';
                 that.flowData.attr.version = '0.1';
-                that.flowData.attr.status = 'creating';
+                that.flowData.attr.status = 'released';
               }
             }
             that.loading = false;
@@ -881,8 +880,8 @@
         console.log(d);
 
         let filter = {
-          modelId: {equal: that.flowData.attr.id},
-          modelVersion: {equal: that.flowData.attr.version}
+          modelId: {is: that.flowData.attr.id},
+          //modelVersion: {is: that.flowData.attr.version}   目前暂时不考虑版本
         }
         let model = {
           modelId: that.flowData.attr.id,

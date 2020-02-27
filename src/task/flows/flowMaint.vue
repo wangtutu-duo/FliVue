@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%">
 
-    <flow-maker :flow-id="flowId"></flow-maker>
+    <flow-maker :flow-name="flowName"></flow-maker>
   </div>
 </template>
 
@@ -18,7 +18,7 @@
         },
       data() {
         return {
-          flowId:this.taskPara,
+          flowName:this.taskPara,
         }
       }
     }
