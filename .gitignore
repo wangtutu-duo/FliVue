@@ -3,7 +3,9 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+*.taz
+*.map
+app*cc.css
 # Editor directories and files
 dist
 .idea
