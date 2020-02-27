@@ -156,7 +156,7 @@
         width="350"
         theme="light"
         class="attr-area"
-        >
+      >
         <flow-attr :plumb="plumb" :flowData="flowData" :select.sync="currentSelect"></flow-attr>
       </a-layout-sider>
     </a-layout>
@@ -236,7 +236,10 @@
       YLaneIcon: {template: yLaneSvg},
       LanePoolIcon: {template: lanePoolSvg}
     },
-    props: {flowId: String,  },
+    props: {
+      flowId: String,
+      flowName: String
+    },
     mounted() {
       const that = this;
       that.dealCompatibility();
@@ -277,9 +280,9 @@
           highNodeShow: true,
           laneNodeShow: true
         },
-        linkinfo:"",
-        nodeinfo:"",
-        errorMsg:"",
+        linkinfo: "",
+        nodeinfo: "",
+        errorMsg: "",
         browserType: 3,
         plumb: {},
         field: {
@@ -295,8 +298,8 @@
             id: '',
             name: 'flow',
             desc: '流程图',
-            version:'1.0',
-
+            version: '1.0',
+            status: "creating" // using   other
           },
           config: {
             showGrid: true,
@@ -312,7 +315,7 @@
           name: '拖拽'
         },
         loading: false,
-        focus:false,
+        focus: false,
         currentSelect: {},
         currentSelectGroup: [],
         activeShortcut: true,
@@ -325,10 +328,9 @@
         }
       }
     },
-    created()
-    {
+    created() {
       let m1 = {};
-      m1["menuName"] =  "F" + ZFSN.getId();
+      m1["menuName"] = "F" + ZFSN.getId();
       m1["axis"] = flowConfig.contextMenu.link.axis;
       m1["menulists"] = flowConfig.contextMenu.link.menulists;
       this.linkContextMenuData = m1;
@@ -433,15 +435,12 @@
           let connObj = conn.connection.canvas;
           let o = {}, id, label, condition;
           let bAdd = false;
-          let l = that.flowData.linkList.find(link => (link.sourceId == conn.sourceId&&link.targetId == conn.targetId))
-          if(l==null||l.id==null)
-          {
+          let l = that.flowData.linkList.find(link => (link.sourceId == conn.sourceId && link.targetId == conn.targetId))
+          if (l == null || l.id == null) {
             id = 'link-' + ZFSN.getId();
             label = '';
             bAdd = true;
-          }
-          else
-          {
+          } else {
             id = l.id;
             label = l.label;
           }
@@ -463,12 +462,9 @@
           $('#' + id).bind('contextmenu', function (e) {
             that.showLinkContextMenu(e);
             let filter = that.flowData.linkList.filter(l => l.id == id)
-            if(filter.length==1)
-            {
+            if (filter.length == 1) {
               that.currentSelect = filter[0]
-            }
-            else
-            {
+            } else {
               that.$message.error('当前节点异常！');
             }
 
@@ -477,12 +473,9 @@
             let event = window.event || e;
             event.stopPropagation();
             let filter = that.flowData.linkList.filter(l => l.id == id)
-            if(filter.length==1)
-            {
+            if (filter.length == 1) {
               that.currentSelect = filter[0]
-            }
-            else
-            {
+            } else {
               that.$message.error('当前节点异常！');
 
 
@@ -516,9 +509,8 @@
       },
       listenShortcut() {
         const that = this;
-        if(!this.focus)
-        {
-          document.onkeydown =null;
+        if (!this.focus) {
+          document.onkeydown = null;
           document.onkeyup = null;
           return;
         }
@@ -618,42 +610,54 @@
         let flowName = this.flowId;
         that.loading = true;
         that.clear();
-        let flow = {paraType: "getFlowPara", paraName: flowName}
-        axios.getPara(flow).then(({data}) => {
-          if (data.isSuccess) {
-            this.$message.success('获取流程成功！');
 
-            if (data.info) {
-              let loadData = data.info;
-              that.flowData.attr = data.info.attr;
-              that.flowData.config = data.info.config;
-              that.flowData.status = flowConfig.flowStatus.LOADING;
-              let nodeList = loadData.nodeList;
-              nodeList.forEach(function (node, index) {
-                that.flowData.nodeList.push(node);
-              });
-              let linkList = loadData.linkList;
-              linkList.forEach(function (link, index) {
-                that.flowData.linkList.push(link);
-              })
-              this.loadFlow()
-            }
-            else {
 
-              that.flowData.status = flowConfig.flowStatus.CREATE
-
-              that.flowData.attr.name = flowName;
-              that.flowData.attr.desc = '权限操作流程';
-              that.flowData.attr.id = 'flow-' + ZFSN.getId();
-
-            }
+        let model =
+          {
+            modelId: this.flowId,
+            //modelName: this.flowName,
+            modelName: this.flowId,
+            modelStatus: "creating",
+            modelAction:"inquireModelFirst"
           }
+        axios.dealFlowModel(model).then(({data}) => {
+            if (data.isSuccess) {
+              this.$message.success(data.okMessage);
+
+              if (data.modelData) {
+                let loadData = data.info;
+                that.flowData.attr = data.info.attr;
+                that.flowData.config = data.info.config;
+                that.flowData.status = flowConfig.flowStatus.LOADING;
+                let nodeList = loadData.nodeList;
+                nodeList.forEach(function (node, index) {
+                  that.flowData.nodeList.push(node);
+                });
+                let linkList = loadData.linkList;
+                linkList.forEach(function (link, index) {
+                  that.flowData.linkList.push(link);
+                })
+                this.loadFlow()
+              } else {
+                that.flowData.status = flowConfig.flowStatus.CREATE
+                that.flowData.attr.id = 'M' + ZFSN.getId();
+                that.flowData.attr.name = flowName;
+                that.flowData.attr.desc = '工作流模型';
+                that.flowData.attr.version = '0.1';
+                that.flowData.attr.status = 'creating';
+              }
+            }
+            that.loading = false;
+
+          }
+        ).catch(() => {
+          this.$message.error('读取流程失败！');
           that.loading = false;
         })
 
+
       },
-      flowContainer()
-      {
+      flowContainer() {
         return 'contain' + ZFSN.getId();
       },
 
@@ -687,16 +691,13 @@
                   strokeWidth: link.cls.linkThickness
                 }
               });
-              if(conn==null)
-              {
+              if (conn == null) {
                 this.$message.error("创建连接有误")
-              }
-              else
-              {
-              let source = nodeList.find(node => (node.id == conn.sourceId));
-              let target = nodeList.find(node => (node.id == conn.targetId));
+              } else {
+                let source = nodeList.find(node => (node.id == conn.sourceId));
+                let target = nodeList.find(node => (node.id == conn.targetId));
 
-              //link.label = source.nodeName + target.nodeName;
+                //link.label = source.nodeName + target.nodeName;
               }
               if (link.label != '') {
                 conn.setLabel({
@@ -794,9 +795,9 @@
       checkFlow() {
 
 
-          const that = this;
-          let nodeList = that.flowData.nodeList;
-          let linkList=that.flowData.linkList;
+        const that = this;
+        let nodeList = that.flowData.nodeList;
+        let linkList = that.flowData.linkList;
 
 
         that.linkinfo = "连接信息："
@@ -805,50 +806,45 @@
         that.nodeinfo = "节点信息："
         that.nodeinfo = that.nodeinfo + nodeList.length;
         that.errorMsg = ""
-          linkList.forEach(function (conn, index) {
-            let source = nodeList.find(node => (node.id == conn.sourceId));
-            let target = nodeList.find(node => (node.id == conn.targetId));
-            let label = ""
-            if(source==null)
-            {
-              that.errorMsg = that.errorMsg + "连线没有找到source节点"
-            }
-            else
-              label = source.nodeDesc + source.nodeName
-            if(target==null)
-            {
-              that.errorMsg = that.errorMsg + "连线没有找到target节点"
-            }
-            else
-            {
-              label = label + target.nodeName + target.nodeDesc;
-            }
+        linkList.forEach(function (conn, index) {
+          let source = nodeList.find(node => (node.id == conn.sourceId));
+          let target = nodeList.find(node => (node.id == conn.targetId));
+          let label = ""
+          if (source == null) {
+            that.errorMsg = that.errorMsg + "连线没有找到source节点"
+          } else
+            label = source.nodeDesc + source.nodeName
+          if (target == null) {
+            that.errorMsg = that.errorMsg + "连线没有找到target节点"
+          } else {
+            label = label + target.nodeName + target.nodeDesc;
+          }
 
-            that.linkinfo= that.linkinfo + "__  " +  label + "__  "
-          });
+          that.linkinfo = that.linkinfo + "__  " + label + "__  "
+        });
 
-          if (nodeList.length <= 0) {
-            this.$message.error('流程图中无任何节点！');
+        if (nodeList.length <= 0) {
+          this.$message.error('流程图中无任何节点！');
+          return false;
+        }
+        that.errorMsg = that.errorMsg + "========================节点错误 "
+        for (let ii = 0; ii < nodeList.length; ii++) {
+          let chekcNode = nodeList[ii];
+          let nodeId = chekcNode.id;
+          let filter0 = linkList.filter(link => (link.sourceId == nodeId || link.targetId == nodeId));
+          let count0 = filter0.length;
+
+          if (count0 == 0) {
+            that.linkinfo = that.linkinfo + " " + chekcNode.nodeDesc + count0;
+            that.errorMsg = that.errorMsg + chekcNode.nodeName + chekcNode.nodeDesc;
+            that.$message.error('节点没有连接任何连线！');
             return false;
           }
-        that.errorMsg = that.errorMsg + "========================节点错误 "
-          for(let ii = 0; ii<nodeList.length; ii++) {
-            let chekcNode = nodeList[ii];
-            let nodeId = chekcNode.id;
-            let filter0 = linkList.filter(link => (link.sourceId == nodeId||link.targetId == nodeId));
-            let count0 = filter0.length;
-
-            if (count0 == 0) {
-              that.linkinfo = that.linkinfo + " " + chekcNode.nodeDesc + count0;
-              that.errorMsg = that.errorMsg + chekcNode.nodeName + chekcNode.nodeDesc;
-              that.$message.error('节点没有连接任何连线！');
-              return false;
-            }
 
 
-          }
+        }
         that.errorMsg = that.errorMsg + "========================连线错误 "
-        linkList.forEach(function(link, index) {
+        linkList.forEach(function (link, index) {
           let filter1 = nodeList.filter(node => (link.sourceId == node.id || link.targetId == node.id));
 
           if (filter1.length == 0) {
@@ -857,9 +853,9 @@
             return false;
           }
 
-          let filter2 = linkList.filter(link2 => ( (link.sourceId == link2.sourceId)&&(link.targetId == link2.targetId)));
+          let filter2 = linkList.filter(link2 => ((link.sourceId == link2.sourceId) && (link.targetId == link2.targetId)));
 
-          if (filter2.length >1 ) {
+          if (filter2.length > 1) {
             that.errorMsg = that.errorMsg + link.label + link.data;
             that.$message.error('连接同样两个节点超过一条连线！');
             return false;
@@ -868,7 +864,7 @@
         });
 
 
-          return true;
+        return true;
 
       },
       saveFlow() {
@@ -876,23 +872,30 @@
         that.loading = true;
         let flowObj = Object.assign({}, that.flowData);
 
-        if (!that.checkFlow())
-        {
+        if (!that.checkFlow()) {
           that.loading = false;
           return;
         }
 
         let d = JSON.stringify(flowObj);
         console.log(d);
-        let action = "edit";
-        if (that.flowData.status == flowConfig.flowStatus.CREATE) action = "add"
-        let flow = {
-          paraType: "saveFlowPara",
-          paraName: that.flowData.attr.name,
-          paraAction: action,
-          paraData: that.flowData
+
+        let filter = {
+          modelId: {equal: that.flowData.attr.id},
+          modelVersion: {equal: that.flowData.attr.version}
         }
-        axios.savePara(flow).then(({data}) => {
+        let model = {
+          modelId: that.flowData.attr.id,
+          modelName: that.flowData.attr.name,
+          modelDesc: that.flowData.attr.desc,
+          modelVersion: that.flowData.attr.version,
+          modelStatus: that.flowData.attr.status,
+          modelData: that.flowData,
+          modelAction: "saveModel",
+          filter: filter,
+
+        }
+        axios.dealFlowModel(model).then(({data}) => {
           if (data.isSuccess) {
             this.$message.success('保存流程成功！');
             that.flowData.status = flowConfig.flowStatus.MODIFY
@@ -992,19 +995,18 @@
           maxY: maxY
         };
       },
-      flowdatachange(arr)
-      {
+      flowdatachange(arr) {
         const that = this;
         let nodeList = that.flowData.nodeList
         let linkList = that.flowData.linkList
 
         this.checkFlow()
 
-        arr.forEach(function(cell, index) {
+        arr.forEach(function (cell, index) {
 
           let inx1 = linkList.findIndex(link => (link.sourceId == cell.id || link.targetId == cell.id));
 
-          while(inx1>=0) {
+          while (inx1 >= 0) {
 
             let sourceId = linkList[inx1].sourceId;
             let targetId = linkList[inx1].targetId;
@@ -1034,7 +1036,7 @@
         // });
         let nodeList = that.flowData.nodeList
         let linkList = that.flowData.linkList
-        linkList.forEach(function(link, index) {
+        linkList.forEach(function (link, index) {
 
           let sourceId = link.sourceId;
           let targetId = link.targetId;
@@ -1100,8 +1102,8 @@
 
         let linkList = that.flowData.linkList;
         let inx = linkList.findIndex(link => (link.sourceId == sourceId && link.targetId == targetId))
-        if (inx>=0)
-          linkList.splice(inx , 1);
+        if (inx >= 0)
+          linkList.splice(inx, 1);
         that.currentSelect = {};
 
       },
@@ -1155,9 +1157,7 @@
         }
       }
     },
-    watch: {
-
-    }
+    watch: {}
   }
 </script>
 

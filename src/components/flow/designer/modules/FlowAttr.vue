@@ -20,7 +20,9 @@
           <a-form-item label="流程版本" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
             <a-input v-model="flowData.attr.version"/>
           </a-form-item>
-
+          <a-form-item label="状态" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+            <a-input disabled =true v-model="flowData.attr.status"/>
+          </a-form-item>
         </a-form>
       </a-tab-pane>
       <a-tab-pane key="node-attr">
