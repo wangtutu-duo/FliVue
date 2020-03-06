@@ -79,5 +79,5 @@
 </script>
 
 <style lang="scss">
-	@import '../style/flow-attr.scss'
+	@import '../style/flow-attr.scss';
 </style>

@@ -49,7 +49,7 @@ export let flowConfig = {
 			filter: "a",
             filterExclude: true,
             maxConnections: -1,
-            endpoint: [ "Dot", { radius: 7 } ],
+            endpoint: [ "Dot", { radius: 10 } ],
             anchor: ["Bottom", "Right", "Top", "Left"]
 		},
 		makeTargetConfig: {
