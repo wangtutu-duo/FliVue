@@ -1019,13 +1019,10 @@
           }
           let inx = nodeList.findIndex(node => node.id == cell.id);
           nodeList.splice(inx, 1);
-          //that.plumb.remove(cell.id);
 
 
         })
 
-
-        //this.loadFlow()
 
       },
       clear() {

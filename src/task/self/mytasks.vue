@@ -4,13 +4,13 @@
 
       <a-modal
         title="输入提交数据"
-
+        ref="userDataModal"
         style="top: 100px;width:800px"
         :visible="modal1Visible"
         @ok="() => submit()"
         @cancel="() => cancel()"
       >
-        <user-data></user-data>
+        <user-data ref="userData" ></user-data>
       </a-modal>
 
       <a-tabs type="card">
@@ -104,6 +104,8 @@
         dataFlow: null,
         modal1Visible: false,
         flowRefNo:null,
+
+
         pagination:
           {
             total: 0,
@@ -157,11 +159,16 @@
         ],
         flowName: "flowBasic1",
         processId: "",
+
         inJsonData: {},
         outJsonData: {},
         loading: false
       }
 
+    },
+    created: function () {
+      console.debug("begin inquire flow")
+      this.inquireFlow();
     },
     methods: {
       setModal1Visible(modal1Visible) {
@@ -210,9 +217,9 @@
         this.inJsonData = flow
         axios.dealFlow(flow).then(({data}) => {
           if (data.isSuccess) {
-
             this.outJsonData = data
             this.dataFlow = data.recordData;
+            this.$message.success(data.okMessage)
           } else {
             this.$message.error(data.errorMessage)
           }
@@ -226,12 +233,23 @@
       submit() {
         this.loading = true;
 
+        console.debug(this.$refs.userData);
+
+
+
         let flow = {
 
           flowRefNo: this.flowRefNo,
           flowAction: "flowCommit",
 
         }
+        let userData= this.$refs.userData.dataSource;
+        userData.forEach((item) =>
+        {
+          let fld = item.fldName;
+          let value = item.fldValue;
+          flow[fld] = value;
+        })
         this.inJsonData = flow
         axios.dealFlow(flow).then(({data}) => {
           if (data.isSuccess) {
@@ -269,7 +287,7 @@
           this.loading = false;
           this.$message.error("访问后台错误")
         });
-      }
+      },
 
     },
   };

@@ -59,6 +59,7 @@ export default {
 
     };
   },
+
   methods: {
     //选项卡切换
     handleClick(tab, event) {},

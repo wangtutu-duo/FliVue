@@ -54,6 +54,7 @@
           top: '0',
           left: '0'
         },
+        folderDivKey:null,
         selectionDisplay: false,
         theme: null,
         foderMenuData: flidConfig.contextMenu.folder,
@@ -61,8 +62,11 @@
       }
     },
     created: function () {
+      this.folderDivKey= new Date().toString();
       this.folderId = this.itemId
       this.getFolderItems()
+
+
     },
     methods: {
 

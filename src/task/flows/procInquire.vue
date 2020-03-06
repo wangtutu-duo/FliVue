@@ -24,6 +24,7 @@
                      :dataSource="dataProc"
                      :columns="colProc"
                      :pagination="pagination"
+                     size="small"
                      :rowSelection="rowSelection">
               <a slot="flowProcId" slot-scope="text" href="javascript:;">{{text}}</a>
               >
@@ -145,6 +146,10 @@
       }
 
     },
+    created()
+    {
+      this.inquireProcess();
+    },
     methods: {
       deleteProcess() {
 
@@ -163,7 +168,7 @@
           if (data.isSuccess) {
 
             this.outJsonData = data
-
+            this.$message.success(data.okMessage)
           } else {
             this.$message.error(data.errorMessage)
           }

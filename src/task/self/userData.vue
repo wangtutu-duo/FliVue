@@ -1,8 +1,9 @@
 <template>
-  <div >
+  <div>
     <a-button class="editable-add-btn" @click="handleAdd">增加字段</a-button>
     <a-table :columns="columns"
-             :pagination = "pagination"
+             :pagination="pagination"
+             size="small"
              :dataSource="dataSource" bordered>
       <template
         v-for="col in ['fldName', 'fldDesc', 'fldValue']"
@@ -35,7 +36,7 @@
   import Wbutton from "../../components/wcontrol/wbutton";
 
   export default {
-    name:"userData",
+    name: "userData",
     components: {
       Wbutton,
       EditableCell,
@@ -44,38 +45,45 @@
       return {
         pagination:
           {
-            total:0,
-            pageSize:10,
+            total: 0,
+            pageSize: 10,
             hideOnSinglePage: true
           },
         dataSource: [
           {
-            key:'1',
+            key: '0',
+            fldName: 'action',
+            fldDesc: '操作',
+            fldValue: 'accept',
+            editable: true
+          },
+          {
+            key: '1',
             fldName: 'orgId',
             fldDesc: '机构号',
             fldValue: '0001',
-            editable:true
+            editable: true
           },
           {
-            key:'2',
+            key: '2',
             fldName: 'userId',
             fldDesc: '用户名',
             fldValue: '0001',
-            editable:true
+            editable: true
           },
           {
-            key:'3',
+            key: '3',
             fldName: 'tranNo',
             fldDesc: '交易号',
             fldValue: 'tran0001',
-            editable:true
+            editable: true
           },
           {
-            key:'4',
+            key: '4',
             fldName: 'tranNum',
             fldDesc: '交易数字',
             fldValue: '30',
-            editable:true
+            editable: true
           },
         ],
         count: 5,
@@ -85,25 +93,25 @@
             title: '字段名称',
             dataIndex: 'fldName',
             width: '30%',
-            scopedSlots: { customRender: 'fldName' },
+            scopedSlots: {customRender: 'fldName'},
           },
           {
             title: '字段描述',
             width: '30%',
             dataIndex: 'fldDesc',
-            scopedSlots: { customRender: 'fldDesc' },
+            scopedSlots: {customRender: 'fldDesc'},
           },
           {
             title: '字段值',
             width: '30%',
             dataIndex: 'fldValue',
-            scopedSlots: { customRender: 'fldValue' },
+            scopedSlots: {customRender: 'fldValue'},
           },
           {
             width: '10%',
             title: '操作',
             dataIndex: 'operation',
-            scopedSlots: { customRender: 'operation' },
+            scopedSlots: {customRender: 'operation'},
           },
         ],
       };
@@ -140,18 +148,24 @@
       },
 
       handleAdd() {
-        const { count, dataSource } = this;
+        const {count, dataSource} = this;
         const newData = {
-          key:`${count}`,
+          key: `${count}`,
           fldName: `fld ${count}`,
           fldDesc: "请输入字段描述",
           fldValue: "",
-          editable:true
+          editable: true
         };
         this.dataSource = [...dataSource, newData];
         this.count = this.count + 1;
       },
     },
+    watch:
+      {
+        dataSource(newVal, oldVal) {
+          this.$emit('datachange', newVal);
+        }
+      }
   };
 </script>
 <style>

@@ -43,6 +43,7 @@
 
       }
     },
+
     mounted: function () {
       this.$nextTick(function () {
         window.addEventListener('resize', this.resizeWindow);

@@ -26,7 +26,7 @@
                      :pagination = "pagination"
                      rowKey="flowRefNo"
                      :scroll="{ x: 1500 }"
-                     size="middle"
+                     size="small"
             >
 
             </a-table>
@@ -138,6 +138,10 @@
         loading: false
       }
 
+    },
+    created()
+    {
+      this.inquireFlow();
     },
     methods: {
       inquireFlow() {
