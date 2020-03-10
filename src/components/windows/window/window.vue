@@ -1,99 +1,99 @@
 <template>
   <div>
-  <a-layout id="components-layout-demo-top" class="layout">
+    <a-layout id="components-layout-demo-top" class="layout">
 
-  <div
-    class="window-body"
-    :class="{
+      <div
+        class="window-body"
+        :class="{
         'focused-window': focused,
         'maximize-window': isMaximized,
         'invisible': invisible
     }"
-    @mousedown="inside"
-    v-mousedown-outside="outside"
-    :style="windowStyle"
-  >
-    <div class="window-border-top">
-      <div
-        class="border-nw"
-        @mousedown="dragStart('nw-resize', $event)"
-        @touchstart="dragStart('nw-resize', $event)"
-      ></div>
-      <div
-        class="border-n"
-        @mousedown="dragStart('n-resize',  $event)"
-        @touchstart="dragStart('n-resize',  $event)"
-      ></div>
-      <div
-        class="border-ne"
-        @mousedown="dragStart('ne-resize', $event)"
-        @touchstart="dragStart('ne-resize', $event)"
-      ></div>
-    </div>
-    <div class="window-border-middle">
-      <div
-        class="border-w"
-        @mousedown="dragStart('w-resize',  $event)"
-        @touchstart="dragStart('w-resize',  $event)"
-      ></div>
-
-      <div class="window-frame">
-        <div class="title-bar">
+        @mousedown="inside"
+        v-mousedown-outside="outside"
+        :style="windowStyle"
+      >
+        <div class="window-border-top">
           <div
-            class="title-bar-icon"
-            :style="{backgroundImage: 'url('+iconImages(this.iconImage)+')'}"
+            class="border-nw"
+            @mousedown="dragStart('nw-resize', $event)"
+            @touchstart="dragStart('nw-resize', $event)"
           ></div>
           <div
-            class="window-title"
-            @mousedown="dragStart('title-bar', $event)"
-            @touchstart="dragStart('title-bar', $event)"
-            @dblclick="toggleMaximizeWindow"
-          >
-            {{title}}
-          </div>
-          <div
-            class="minimize-button"
-            :class="minimizeButtonOut"
-            @mouseover.once="minimizeButtonOut='minimize-button-out'"
-            @click="toggleMinimizeWindow"
+            class="border-n"
+            @mousedown="dragStart('n-resize',  $event)"
+            @touchstart="dragStart('n-resize',  $event)"
           ></div>
           <div
-            class="maximize-button"
-            :class="maximizeButtonOut"
-            @mouseover.once="maximizeButtonOut='maximize-button-out'"
-            @click="toggleMaximizeWindow"
-          ></div>
-          <div
-            class="close-button"
-            :class="closeButtonOut"
-            @mouseover.once="closeButtonOut='close-button-out'"
-            @click="close"
+            class="border-ne"
+            @mousedown="dragStart('ne-resize', $event)"
+            @touchstart="dragStart('ne-resize', $event)"
           ></div>
         </div>
+        <div class="window-border-middle">
+          <div
+            class="border-w"
+            @mousedown="dragStart('w-resize',  $event)"
+            @touchstart="dragStart('w-resize',  $event)"
+          ></div>
+
+          <div class="window-frame">
+            <div class="title-bar">
+              <div
+                class="title-bar-icon"
+                :style="{backgroundImage: 'url('+iconImages(this.iconImage)+')'}"
+              ></div>
+              <div
+                class="window-title"
+                @mousedown="dragStart('title-bar', $event)"
+                @touchstart="dragStart('title-bar', $event)"
+                @dblclick="toggleMaximizeWindow"
+              >
+                {{title}}
+              </div>
+              <div
+                class="minimize-button"
+                :class="minimizeButtonOut"
+                @mouseover.once="minimizeButtonOut='minimize-button-out'"
+                @click="toggleMinimizeWindow"
+              ></div>
+              <div
+                class="maximize-button"
+                :class="maximizeButtonOut"
+                @mouseover.once="maximizeButtonOut='maximize-button-out'"
+                @click="toggleMaximizeWindow"
+              ></div>
+              <div
+                class="close-button"
+                :class="closeButtonOut"
+                @mouseover.once="closeButtonOut='close-button-out'"
+                @click="close"
+              ></div>
+            </div>
 
 
-        <div class="main-panel">
+            <div class="main-panel">
 
-          {{windowMessage}}
-          <component :is="childComp" :item-id="itemId" :process-id="processId" :task-para="compPara" ></component>
+              {{windowMessage}}
+              <component :is="childComp" :item-id="itemId" :process-id="processId" :task-para="compPara"></component>
 
 
-          <div class="window-overlay" :style="{display: overlayDisplay, cursor: overlayCursor}"></div>
+              <div class="window-overlay" :style="{display: overlayDisplay, cursor: overlayCursor}"></div>
+            </div>
+          </div>
+          <div class="border-e" @mousedown="dragStart('e-resize', $event)"
+               @touchstart="dragStart('e-resize', $event)"></div>
+        </div>
+        <div class="window-border-bottom">
+          <div class="border-sw" @mousedown="dragStart('sw-resize', $event)"
+               @touchstart="dragStart('sw-resize', $event)"></div>
+          <div class="border-s" @mousedown="dragStart('s-resize',  $event)"
+               @touchstart="dragStart('s-resize',  $event)"></div>
+          <div class="border-se" @mousedown="dragStart('se-resize', $event)"
+               @touchstart="dragStart('se-resize', $event)"></div>
         </div>
       </div>
-      <div class="border-e" @mousedown="dragStart('e-resize', $event)"
-           @touchstart="dragStart('e-resize', $event)"></div>
-    </div>
-    <div class="window-border-bottom">
-      <div class="border-sw" @mousedown="dragStart('sw-resize', $event)"
-           @touchstart="dragStart('sw-resize', $event)"></div>
-      <div class="border-s" @mousedown="dragStart('s-resize',  $event)"
-           @touchstart="dragStart('s-resize',  $event)"></div>
-      <div class="border-se" @mousedown="dragStart('se-resize', $event)"
-           @touchstart="dragStart('se-resize', $event)"></div>
-    </div>
-  </div>
-    </a-layout >
+    </a-layout>
 
 
   </div>
@@ -127,7 +127,7 @@
         compChild: {name: "", control: {}, para: {}},
         wndInfo: {},
         taskInfo: {},
-        compPara:this.taskPara,
+        compPara: this.taskPara,
         minWidth: 190,
         minHeight: 46,
         iconImage: null,
@@ -165,7 +165,7 @@
       }
     },
     created: function () {
-      console.debug("create");
+
       console.debug(store);
 
       this.wndInfo = store.getters["wins/getWinInfo"](this.processId)
@@ -190,7 +190,7 @@
         this.source = "components/windows/folder/folder.vue"
       } else if (this.taskInfo.madeBy == "component")
         this.source = this.taskInfo.source;
-      if(this.taskInfo&&this.taskInfo.taskPara) {
+      if (this.taskInfo && this.taskInfo.taskPara) {
         if (this.compPara == null)
           this.compPara = this.taskInfo.taskPara;
       }
@@ -200,19 +200,8 @@
 
 
       this.registerComponent1(this.compChild).then(component => {
-
-        let cpt = Vue.extend(component.default);
-
-        new cpt({
-            el: this.$refs.changcomponent,
-          },
-        );
-        if (this.winType == "folder") {
-
-          this.comp = component;
-        }
-      }).catch(e=>
-      {
+        console.debug("创建组件成功")
+      }).catch(e => {
         this.windowMessage = "创建失败：" + this.source
       })
 

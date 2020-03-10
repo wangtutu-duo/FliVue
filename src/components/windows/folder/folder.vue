@@ -54,7 +54,7 @@
           top: '0',
           left: '0'
         },
-        folderDivKey:null,
+
         selectionDisplay: false,
         theme: null,
         foderMenuData: flidConfig.contextMenu.folder,
@@ -62,9 +62,9 @@
       }
     },
     created: function () {
-      this.folderDivKey= new Date().toString();
-      this.folderId = this.itemId
-      this.getFolderItems()
+
+        this.folderId = this.itemId
+        this.getFolderItems()
 
 
     },
@@ -96,6 +96,7 @@
         if (this.folderId == null) {
           return;
         }
+
         let info = {paraType: "getMenuPara", folderId: this.folderId}
         store.dispatch("info/getFolderInfoAct", info).then((data1) => {
 
@@ -118,19 +119,10 @@
 
       },
       needHelp: function (vm, event) {
-        alert();
+
 
       },
     },
-    watch:
-      {
-
-
-        folderId(newVal, oldVal) {
-          this.getFolderItems()
-        }
-      }
-
 
   }
 </script>

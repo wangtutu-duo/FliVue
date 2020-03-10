@@ -115,6 +115,19 @@
             dataIndex: 'nodeDesc',
           },
           {
+            title: '执行机构',
+            dataIndex: 'flowOrg',
+          },
+          {
+            title: '指定执行人',
+            dataIndex: 'flowAssignUser',
+          },
+
+          {
+            title: '实际执行人',
+            dataIndex: 'flowUser',
+          },
+          {
             title: '创建时间',
             dataIndex: 'flowCreate',
           },

@@ -150,6 +150,12 @@
           //flowAppId: "defalut",
           flowName: this.flowName,
           flowDesc: this.flowDesc,
+          flowOrgId: "firstOrgId",
+          flowOrgName: "firstOrgName",
+          flowUserId: "firstUserId",
+          flowUserName: "firstUserName",
+
+
           flowAction: "flowBegin"
         }
         this.inJsonData = flow
@@ -182,7 +188,11 @@
           //flowAppId: "defalut",
           flowRefNo: this.flowRefNo,
 
-          //flowProcDesc: this.flowDesc,
+          flowOrgId: "firstOrgId",
+          flowOrgName: "firstOrgName",
+          flowUserId: "firstUserId",
+          flowUserName: "firstUserName",
+
           flowAction: "flowCommit"
         }
         this.inJsonData = flow
