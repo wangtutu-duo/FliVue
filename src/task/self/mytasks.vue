@@ -17,13 +17,13 @@
         <a-tab-pane tab="手工处理" key="hand">
           <div>
             <a-row>
-              <a-col :span="4">请输入流程名称</a-col>
+              <a-col :span="4">请输入机构代号</a-col>
               <a-col :span="5">
-                <wedit v-model="flowName" input-hint="请输入流程名称"></wedit>
+                <wedit v-model="orgId" input-hint="请输入机构代号"></wedit>
               </a-col>
-              <a-col :span="4">请输入流程名称</a-col>
+              <a-col :span="4">请输入用户代号</a-col>
               <a-col :span="5">
-                <wedit v-model="processId" input-hint="请输入进程号"></wedit>
+                <wedit v-model="userId" input-hint="请输入用户代号"></wedit>
               </a-col>
               <a-col :span="6">
                 <wbutton @click="inquireFlow">查询流程</wbutton>
@@ -104,7 +104,8 @@
         dataFlow: null,
         modal1Visible: false,
         flowRefNo:null,
-
+        orgId:null,
+        userId:null,
 
         pagination:
           {
@@ -220,7 +221,9 @@
 
         this.loading = true;
         let filter = {
-          flowStatus: {in: ["create", "open", "begin"]}
+          flowStatus: {in: ["create", "open", "begin"]},
+          //orgId:{is:this.orgId},
+          //userId:{is:this.userId}
         }
         let flow = {
           //flowFirmId: "defalut",
