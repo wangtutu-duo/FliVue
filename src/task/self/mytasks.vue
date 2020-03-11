@@ -145,6 +145,23 @@
             dataIndex: 'flowEnd',
           },
           {
+            title: '指定机构',
+            dataIndex: 'assignOrgId',
+          },
+          {
+            title: '执行机构',
+            dataIndex: 'dealOrgId',
+          },
+          {
+            title: '指定人',
+            dataIndex: 'assignUserId',
+          },
+
+          {
+            title: '执行人',
+            dataIndex: 'dealUserId',
+          },
+          {
             title: '进程状态',
             dataIndex: 'flowStatus',
           },
@@ -181,6 +198,8 @@
         let flow = {
           flowRefNo: flowRefNo,
           flowAction: "flowBegin",
+          flowOrgId:"beginOrg",
+          flowUserId:"beginUser",
           flowCheck: "false",
         }
         this.inJsonData = flow

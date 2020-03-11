@@ -182,7 +182,7 @@
             </a-form-item>
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'child-flow'">
+        <template v-else-if="currentSelect.type == 'childflow'">
           <a-form layout="horizontal">
             <a-form-item label="类型" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-tag color="purple">{{ currentSelect.type }}</a-tag>

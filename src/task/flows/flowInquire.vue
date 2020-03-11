@@ -115,17 +115,21 @@
             dataIndex: 'nodeDesc',
           },
           {
-            title: '执行机构',
-            dataIndex: 'flowOrg',
+            title: '指定机构',
+            dataIndex: 'assignOrgId',
           },
           {
-            title: '指定执行人',
-            dataIndex: 'flowAssignUser',
+            title: '执行机构',
+            dataIndex: 'dealOrgId',
+          },
+          {
+            title: '指定人',
+            dataIndex: 'assignUserId',
           },
 
           {
-            title: '实际执行人',
-            dataIndex: 'flowUser',
+            title: '执行人',
+            dataIndex: 'dealUserId',
           },
           {
             title: '创建时间',

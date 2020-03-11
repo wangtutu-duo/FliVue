@@ -115,7 +115,7 @@
 
   </div>
 
-  <div v-else-if="node.type == 'child-flow'"
+  <div v-else-if="node.type == 'childflow'"
       :id="node.id"
       class="common-rectangle-node"
       :class="{ active: isActive() }"

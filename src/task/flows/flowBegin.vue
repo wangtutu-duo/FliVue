@@ -155,7 +155,6 @@
           flowUserId: "firstUserId",
           flowUserName: "firstUserName",
 
-
           flowAction: "flowBegin"
         }
         this.inJsonData = flow
@@ -192,6 +191,7 @@
           flowOrgName: "firstOrgName",
           flowUserId: "firstUserId",
           flowUserName: "firstUserName",
+          tranRefNo:"tranRefNo",
 
           flowAction: "flowCommit"
         }

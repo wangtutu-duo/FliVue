@@ -81,7 +81,7 @@ export const commonNodes = [
 
 export const highNodes = [
 	{
-		type: 'child-flow', 
+		type: 'childflow',
 		nodeName: 'CHILD',
 		icon: 'ChildFlowIcon',
     nodeDesc: '子流程',
