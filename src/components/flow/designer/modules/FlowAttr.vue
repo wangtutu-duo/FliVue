@@ -122,14 +122,22 @@
               <a-input :value="currentSelect.id" disabled/>
             </a-form-item>
             <a-form-item label="名称" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入节点名称" :value="currentSelect.nodeName" @change="nodeNameChange"/>
+              <a-input placeholder="请输入名称" :value="currentSelect.nodeName" @change="nodeNameChange"/>
             </a-form-item>
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
-            <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+            <a-form-item label="触发字段" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入触发字段" v-model="currentSelect.trigger"/>
             </a-form-item>
+            <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入延迟时间（秒）" v-model="currentSelect.delay"/>
+            </a-form-item>
+            <a-form-item label="间隔时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入间隔时间（秒）" v-model="currentSelect.interval"/>
+            </a-form-item>
+
+
           </a-form>
         </template>
 

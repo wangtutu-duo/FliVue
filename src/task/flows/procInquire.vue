@@ -25,6 +25,7 @@
                      :columns="colProc"
                      :pagination="pagination"
                      size="small"
+                     :scroll="{ x: 2000 }"
                      :rowSelection="rowSelection">
               <a slot="flowProcId" slot-scope="text" href="javascript:;">{{text}}</a>
               >

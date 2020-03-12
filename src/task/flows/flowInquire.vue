@@ -25,7 +25,7 @@
                      :columns="colFlow"
                      :pagination = "pagination"
                      rowKey="flowRefNo"
-                     :scroll="{ x: 1500 }"
+                     :scroll="{ x: 2000 }"
                      size="small"
             >
 

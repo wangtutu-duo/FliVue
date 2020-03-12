@@ -75,7 +75,9 @@ export const commonNodes = [
 		nodeName: '',
 		icon: 'EventIcon',
     nodeDesc:'事件节点',
-    trigger:''
+    trigger:'',
+    delay:'',
+    interval:''
 	}
 ];
 
