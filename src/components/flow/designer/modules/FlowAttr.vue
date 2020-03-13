@@ -111,6 +111,7 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
+
           </a-form>
         </template>
         <template v-else-if="currentSelect.type == 'event'">
@@ -135,6 +136,9 @@
             </a-form-item>
             <a-form-item label="间隔时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入间隔时间（秒）" v-model="currentSelect.interval"/>
+            </a-form-item>
+            <a-form-item label="执行次数" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入执行次数" v-model="currentSelect.maxcount"/>
             </a-form-item>
 
 

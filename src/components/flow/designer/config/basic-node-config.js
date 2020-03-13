@@ -55,7 +55,8 @@ export const commonNodes = [
 		type: 'auto',
 		nodeName: '',
 		icon: 'autoIcon',
-    nodeDesc:'自动节点'
+    nodeDesc:'自动节点',
+
 	},
   {
     type: 'outgate',
@@ -77,7 +78,9 @@ export const commonNodes = [
     nodeDesc:'事件节点',
     trigger:'',
     delay:'',
-    interval:''
+    interval:'',
+    maxcount:'',
+    limit:'',
 	}
 ];
 
