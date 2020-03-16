@@ -114,6 +114,12 @@
             fldDesc: '机构名称',
             fldValue: '我的单位',
           },
+          {
+            key: '2',
+            fldName: 'action',
+            fldDesc: '动作',
+            fldValue: '1',
+          },
         ],
 
         columns: [
@@ -154,7 +160,9 @@
           flowOrgName: "firstOrgName",
           flowUserId: "firstUserId",
           flowUserName: "firstUserName",
-
+          AAA:"A123",
+          BBB:"B456",
+          action:"2",
           flowAction: "flowBegin"
         }
         this.inJsonData = flow
@@ -192,7 +200,9 @@
           flowUserId: "firstUserId",
           flowUserName: "firstUserName",
           tranRefNo:"tranRefNo",
-
+          AAA:"A123",
+          BBB:"B456",
+          action:"2",
           flowAction: "flowCommit"
         }
         this.inJsonData = flow

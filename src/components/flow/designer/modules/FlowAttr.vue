@@ -78,6 +78,9 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" :value="currentSelect.nodeDesc" @change="nodeDescChange"/>
             </a-form-item>
+            <a-form-item label="参照节点" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入参照节点" v-model="currentSelect.referNode"/>
+            </a-form-item>
           </a-form>
         </template>
         <template v-if="currentSelect.type == 'option'">
@@ -111,7 +114,15 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
-
+            <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入延迟时间（秒）" v-model="currentSelect.delay"/>
+            </a-form-item>
+            <a-form-item label="间隔时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入间隔时间（秒）" v-model="currentSelect.interval"/>
+            </a-form-item>
+            <a-form-item label="执行次数" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入执行次数" v-model="currentSelect.maxcount"/>
+            </a-form-item>
           </a-form>
         </template>
         <template v-else-if="currentSelect.type == 'event'">
@@ -129,17 +140,9 @@
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
             <a-form-item label="触发字段" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入触发字段" v-model="currentSelect.trigger"/>
+              <a-input placeholder="请输入触发字段" v-model="currentSelect.eventFields"/>
             </a-form-item>
-            <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入延迟时间（秒）" v-model="currentSelect.delay"/>
-            </a-form-item>
-            <a-form-item label="间隔时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入间隔时间（秒）" v-model="currentSelect.interval"/>
-            </a-form-item>
-            <a-form-item label="执行次数" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入执行次数" v-model="currentSelect.maxcount"/>
-            </a-form-item>
+
 
 
           </a-form>
