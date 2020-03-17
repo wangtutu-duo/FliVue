@@ -37,7 +37,7 @@
                      :pagination="pagination"
                      rowKey="flowRefNo"
                      :scroll="{ x: 1500 }"
-                     size="middle"
+                     size="small"
             >
               <template slot="operation" slot-scope="text, record">
                 <wbutton @click="prepareTask(record.flowRefNo)">执行</wbutton>
@@ -221,7 +221,7 @@
 
         this.loading = true;
         let filter = {
-          flowStatus: {in: ["create", "open", "begin"]},
+          flowStatus: {in: ["create", "open", "begin","option"]},
           //orgId:{is:this.orgId},
           //userId:{is:this.userId}
         }

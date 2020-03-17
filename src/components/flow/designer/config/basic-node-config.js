@@ -49,8 +49,8 @@ export const commonNodes = [
     type: 'common',
     nodeName: '',
     icon: 'CommonIcon',
-    nodeDesc: '人工必做',
-    referNode: '参照节点'
+    nodeDesc: '人工处理',
+    referNode: ''
   },
 
   {
