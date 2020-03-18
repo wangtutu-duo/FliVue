@@ -83,6 +83,23 @@
             </a-form-item>
           </a-form>
         </template>
+        <template v-if="currentSelect.type == 'commons'">
+          <a-form layout="horizontal">
+            <a-form-item label="类型" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-tag color="purple">{{ currentSelect.type }}</a-tag>
+            </a-form-item>
+            <a-form-item label="id" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input :value="currentSelect.id" disabled/>
+            </a-form-item>
+            <a-form-item label="节点名称" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入节点名称" :value="currentSelect.nodeName" @change="nodeNameChange"/>
+            </a-form-item>
+            <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入节点描述" :value="currentSelect.nodeDesc" @change="nodeDescChange"/>
+            </a-form-item>
+
+          </a-form>
+        </template>
         <template v-if="currentSelect.type == 'option'">
           <a-form layout="horizontal">
             <a-form-item label="类型" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
@@ -101,6 +118,23 @@
         </template>
 
         <template v-else-if="currentSelect.type == 'auto'">
+          <a-form layout="horizontal">
+            <a-form-item label="类型" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-tag color="purple">{{ currentSelect.type }}</a-tag>
+            </a-form-item>
+            <a-form-item label="id" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input :value="currentSelect.id" disabled/>
+            </a-form-item>
+            <a-form-item label="节点名称" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入节点名称" :value="currentSelect.nodeName" @change="nodeNameChange"/>
+            </a-form-item>
+            <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
+            </a-form-item>
+
+          </a-form>
+        </template>
+        <template v-else-if="currentSelect.type == 'autos'">
           <a-form layout="horizontal">
             <a-form-item label="类型" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-tag color="purple">{{ currentSelect.type }}</a-tag>
@@ -179,6 +213,12 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
+            <a-form-item label="通过标识" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入通过标识" v-model="currentSelect.pass"/>
+            </a-form-item>
+            <a-form-item label="后台判断" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入后台判断方法" v-model="currentSelect.method"/>
+            </a-form-item>
           </a-form>
         </template>
         <template v-else-if="currentSelect.type == 'outgate'">
@@ -194,6 +234,9 @@
             </a-form-item>
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
+            </a-form-item>
+            <a-form-item label="强制结束节点" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入强制结束节点" v-model="currentSelect.quit"/>
             </a-form-item>
           </a-form>
         </template>

@@ -52,18 +52,6 @@ export const commonNodes = [
     nodeDesc: '人工处理',
     referNode: ''
   },
-
-  {
-    type: 'auto',
-    nodeName: '',
-    method: '',
-    icon: 'autoIcon',
-    nodeDesc: '自动节点',
-    delay: '',
-    interval: '',
-    maxcount: '',
-    limit: '',
-  },
   {
     type: 'event',
     nodeName: '',
@@ -72,19 +60,47 @@ export const commonNodes = [
     eventFields: '',
   },
   {
+    type: 'auto',
+    nodeName: '',
+    method: '',
+    icon: 'autoIcon',
+    nodeDesc: '自动节点',
+  },
+
+  {
     type: 'outgate',
     nodeName: '',
     nodeDesc: '分发',
-    icon: 'GatewayIcon'
+    icon: 'GatewayIcon',
+    quit:""  //强制结束，一般指的是新线程结束，其他并行的强制结束
   },
   {
     type: 'ingate',
     nodeName: '',
     nodeDesc: '合并',
-    icon: 'GatewayIcon'
+    icon: 'GatewayIcon',
+    pass:"",    //可以填数字或百分比
+    method:""   //每次调用后台判断方法
+
   },
+  {
+    type: 'commons',
+    nodeName: '',
+    icon: 'CommonIcon',
+    nodeDesc: '多任务',
 
-
+  },
+  {
+    type: 'autos',
+    nodeName: '',
+    method: '',
+    icon: 'autoIcon',
+    nodeDesc: '多线程',
+    delay: '',
+    interval: '',
+    maxcount: '',
+    limit: '',
+  },
 ];
 
 export const highNodes = [
