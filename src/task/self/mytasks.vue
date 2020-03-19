@@ -5,12 +5,12 @@
       <a-modal
         title="输入提交数据"
         ref="userDataModal"
-        style="top: 100px;width:800px"
+        style="top: 80px;width:600px"
         :visible="modal1Visible"
         @ok="() => submit()"
         @cancel="() => cancel()"
       >
-        <user-data ref="userData" ></user-data>
+        <user-data ref="userData"></user-data>
       </a-modal>
 
       <a-tabs type="card">
@@ -36,7 +36,7 @@
                      :columns="colFlow"
                      :pagination="pagination"
                      rowKey="flowRefNo"
-                     :scroll="{ x: 1500 }"
+                     :scroll="{ x: 2000 }"
                      size="small"
             >
               <template slot="operation" slot-scope="text, record">
@@ -103,14 +103,19 @@
       return {
         dataFlow: null,
         modal1Visible: false,
-        flowRefNo:null,
-        orgId:null,
-        userId:null,
+        flowRefNo: null,
+        orgId: null,
+        userId: null,
 
         pagination:
           {
+            //defaultCurrent:1,
+            //current:1,
+           // showSizeChange:()=>{this.inquireFlow();},
+            showQuickJumper:true,
             total: 0,
-            pageSize: 10,
+            pageSize: 8,
+           // change:()=>{this.inquireFlow();},
           },
         colFlow: [
           {
@@ -199,8 +204,8 @@
         let flow = {
           flowRefNo: flowRefNo,
           flowAction: "flowBegin",
-          flowOrgId:"beginOrg",
-          flowUserId:"beginUser",
+          flowOrgId: "beginOrg",
+          flowUserId: "beginUser",
           flowCheck: "false",
         }
         this.inJsonData = flow
@@ -221,7 +226,7 @@
 
         this.loading = true;
         let filter = {
-          flowStatus: {in: ["create", "open", "begin","option"]},
+          flowStatus: {in: ["create", "open", "begin", "option"]},
           //orgId:{is:this.orgId},
           //userId:{is:this.userId}
         }
@@ -234,13 +239,14 @@
 
           filter: filter,
           currentPage: 1,
-          pageSize: 10
+          pageSize: 1000,
         }
         this.inJsonData = flow
         axios.dealFlow(flow).then(({data}) => {
           if (data.isSuccess) {
             this.outJsonData = data
             this.dataFlow = data.recordData;
+
             this.$message.success(data.okMessage)
           } else {
             this.$message.error(data.errorMessage)
@@ -258,16 +264,14 @@
         console.debug(this.$refs.userData);
 
 
-
         let flow = {
 
           flowRefNo: this.flowRefNo,
           flowAction: "flowCommit",
 
         }
-        let userData= this.$refs.userData.dataSource;
-        userData.forEach((item) =>
-        {
+        let userData = this.$refs.userData.dataSource;
+        userData.forEach((item) => {
           let fld = item.fldName;
           let value = item.fldValue;
           flow[fld] = value;

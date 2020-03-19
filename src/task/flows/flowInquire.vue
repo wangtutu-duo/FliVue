@@ -115,6 +115,10 @@
             dataIndex: 'nodeDesc',
           },
           {
+            title: '网关ID',
+            dataIndex: 'flowGateId',
+          },
+          {
             title: '指定机构',
             dataIndex: 'assignOrgId',
           },
@@ -171,7 +175,7 @@
           flowProcId: this.processId,
           flowAction: "flowInquire",
           currentPage: 1,
-          pageSize: 10
+          pageSize: 1000
         }
         this.inJsonData = flow
         axios.dealFlow(flow).then(({data}) => {

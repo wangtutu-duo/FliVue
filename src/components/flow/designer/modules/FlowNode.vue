@@ -64,6 +64,19 @@
     <a-icon type="user" class="node-icon" />
     {{ node.nodeDesc }}
   </div>
+  <div v-else-if="node.type == 'notice'"
+       :id="node.id"
+       class="common-rectangle-node"
+       :class="{ active: isActive() }"
+       :style="{ top: node.y + 'px', left: node.x + 'px',
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' :
+    																								(currentTool.type == 'zoom-in' ? 'zoom-in' :
+    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+       @click.stop="selectNode"
+       @contextmenu.stop="showNodeContextMenu">
+    <a-icon type="user" class="node-icon" />
+    {{ node.nodeDesc }}
+  </div>
   <div v-else-if="node.type == 'auto'"
       :id="node.id"
       class="common-rectangle-node"
@@ -90,6 +103,7 @@
     <a-icon type="sync" class="node-icon" />
     {{ node.nodeDesc }}
   </div>
+
   <div v-else-if="node.type == 'event'"
       :id="node.id"
       class="common-circle-node"

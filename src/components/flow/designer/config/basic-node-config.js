@@ -101,6 +101,13 @@ export const commonNodes = [
     maxcount: '',
     limit: '',
   },
+  {
+    type: 'notice',
+    nodeName: '',
+    icon: 'autoIcon',
+    nodeDesc: '通知',
+
+  },
 ];
 
 export const highNodes = [
