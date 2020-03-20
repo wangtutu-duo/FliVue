@@ -134,7 +134,7 @@
 
           </a-form>
         </template>
-        <template v-else-if="currentSelect.type == 'autos'">
+        <template v-else-if="currentSelect.type == 'threads'">
           <a-form layout="horizontal">
             <a-form-item label="类型" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-tag color="purple">{{ currentSelect.type }}</a-tag>
@@ -149,13 +149,16 @@
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
             <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入延迟时间（秒）" v-model="currentSelect.delay"/>
+              <a-input placeholder="请输入延迟时间（<60秒）" v-model="currentSelect.delay"/>
             </a-form-item>
             <a-form-item label="间隔时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入间隔时间（秒）" v-model="currentSelect.interval"/>
             </a-form-item>
             <a-form-item label="执行次数" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入执行次数" v-model="currentSelect.maxcount"/>
+              <a-input placeholder="请输入执行次数" v-model="currentSelect.runCount"/>
+            </a-form-item>
+            <a-form-item label="运行时长" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入运行时间（秒）" v-model="currentSelect.runTime"/>
             </a-form-item>
           </a-form>
         </template>
@@ -230,8 +233,11 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
-            <a-form-item label="通过标识" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入通过标识" v-model="currentSelect.pass"/>
+            <a-form-item label="通过依据" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+            <a-input placeholder="请输入数字或百分比" v-model="currentSelect.pass"/>
+          </a-form-item>
+            <a-form-item label="判断脚本" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入脚本" v-model="currentSelect.script"/>
             </a-form-item>
             <a-form-item label="后台判断" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入后台判断方法" v-model="currentSelect.method"/>

@@ -91,7 +91,7 @@
         flowId: "",
         loading: false,
         disableCommit:true,
-        flowName: "flowGate1",
+        flowName: "flowAutos1",
         inJsonData:{},
         outJsonData:{},
         flowRefNo: null,

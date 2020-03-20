@@ -80,6 +80,7 @@ export const commonNodes = [
     nodeDesc: '合并',
     icon: 'GatewayIcon',
     pass:"",    //可以填数字或百分比
+    script:"",  //通过脚本判断
     method:""   //每次调用后台判断方法
 
   },
@@ -91,15 +92,15 @@ export const commonNodes = [
 
   },
   {
-    type: 'autos',
+    type: 'threads',
     nodeName: '',
     method: '',
     icon: 'autoIcon',
     nodeDesc: '多线程',
     delay: '',
     interval: '',
-    maxcount: '',
-    limit: '',
+    runCount: '',   //运行次数
+    runTime: '',    //持续时间
   },
   {
     type: 'notice',

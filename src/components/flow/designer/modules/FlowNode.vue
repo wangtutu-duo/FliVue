@@ -90,7 +90,7 @@
 			<a-icon type="sync" class="node-icon" />
 			{{ node.nodeDesc }}
   </div>
-  <div v-else-if="node.type == 'autos'"
+  <div v-else-if="node.type == 'threads'"
        :id="node.id"
        class="common-rectangle-node"
        :class="{ active: isActive() }"
