@@ -110,6 +110,11 @@ export default {
     var ret = instance.post('/myflid/dealFlow', data);
     return ret;
   },
+  dealJob(data)
+  {
+    var ret = instance.post('/myflid/dealJob', data);
+    return ret;
+  },
   dealFlowModel(data)
   {
     var ret = instance.post('/myflid/dealModel', data);
