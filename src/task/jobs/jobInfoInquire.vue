@@ -18,7 +18,7 @@
                      :dataSource="dataJobInfo"
                      :columns="colJobInfo"
                      :pagination="pagination"
-                     rowKey="jogLogId"
+                     rowKey="jobId"
                      :scroll="{ x: 1800 }"
                      size="small"
             >
@@ -110,6 +110,14 @@
           {
             title: 'job序号',
             dataIndex: 'jobNo',
+          },
+          {
+            title: '机器名',
+            dataIndex: 'runHost',
+          },
+          {
+            title: '机器IP',
+            dataIndex: 'runIp',
           },
           {
             title: '创建时间',
