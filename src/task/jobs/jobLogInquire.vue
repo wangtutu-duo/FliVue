@@ -9,17 +9,17 @@
             <a-row>
 
               <a-col :span="6">
-                <wbutton @click="inquireJobInfo">查询任务信息</wbutton>
+                <wbutton @click="inquireJobLog">查询任务日志</wbutton>
               </a-col>
             </a-row>
 
 
             <a-table bordered
-                     :dataSource="dataJobInfo"
-                     :columns="colJobInfo"
+                     :dataSource="dataJobLog"
+                     :columns="colJobLog"
                      :pagination="pagination"
                      rowKey="jogLogId"
-                     :scroll="{ x: 1800 }"
+                     :scroll="{ x: 1000 }"
                      size="small"
             >
 
@@ -73,7 +73,7 @@
   import JsonView from 'vue-json-viewer'
 
   export default {
-    name: "jobInfoInquire",
+    name: "jobLogInquire",
     components: {Wbutton, Wedit, JsonView},
     props:
       {
@@ -82,7 +82,7 @@
       },
     data() {
       return {
-        dataJobInfo: null,
+        dataJobLog: null,
         pagination:
           {
             //defaultCurrent:1,
@@ -93,8 +93,11 @@
             pageSize: 8,
             // change:()=>{this.inquireFlow();},
           },
-        colJobInfo: [
-
+        colJobLog: [
+          {
+            title: 'LogId',
+            dataIndex: 'logId',
+          },
           {
             title: 'JobId',
             dataIndex: 'jobId',
@@ -112,40 +115,16 @@
             dataIndex: 'jobNo',
           },
           {
-            title: '创建时间',
-            dataIndex: 'jobCreate',
+            title: '执行时间',
+            dataIndex: 'jobTime',
           },
           {
-            title: '开始时间',
-            dataIndex: 'jobBegin',
-          },
-          {
-            title: '上次执行时间',
-            dataIndex: 'prevTime',
-          },
-          {
-            title: '下次执行时间',
-            dataIndex: 'nextTime',
-          },
-          {
-            title: '最新状态',
+            title: 'job状态',
             dataIndex: 'jobStatus',
           },
           {
-            title: '触发次数',
-            dataIndex: 'triggerCount',
-          },
-          {
-            title: '执行次数',
-            dataIndex: 'dealCount',
-          },
-          {
-            title: '成功次数',
-            dataIndex: 'okCount',
-          },
-          {
-            title: '失败次数',
-            dataIndex: 'failCount',
+            title: '任务个数',
+            dataIndex: 'jobCount',
           },
           {
             title: 'job备注',
@@ -162,12 +141,12 @@
     },
     created: function () {
       console.debug("begin inquire job log")
-      this.inquireJobInfo();
+      this.inquireJobLog();
     },
     methods: {
 
 
-      inquireJobInfo() {
+      inquireJobLog() {
 
         this.loading = true;
         let filter = {
@@ -180,7 +159,7 @@
           //flowAppId: "defalut",
         //  flowName: this.flowName,
         //  flowProcId: this.processId,
-          jobAction: "jobInquireInfo",
+          jobAction: "jobInquireLog",
 
          // filter: filter,
           currentPage: 1,
@@ -190,7 +169,7 @@
         axios.dealJob(joblog).then(({data}) => {
           if (data.isSuccess) {
             this.outJsonData = data
-            this.dataJobInfo = data.recordData;
+            this.dataJobLog = data.recordData;
 
             this.$message.success(data.okMessage)
           } else {
