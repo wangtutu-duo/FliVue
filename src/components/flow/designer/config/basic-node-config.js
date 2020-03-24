@@ -100,7 +100,6 @@ export const commonNodes = [
     delay: '',
     interval: '',
     runCount: '',   //运行次数
-    runTime: '',    //持续时间
   },
   {
     type: 'notice',

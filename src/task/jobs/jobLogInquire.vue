@@ -18,7 +18,7 @@
                      :dataSource="dataJobLog"
                      :columns="colJobLog"
                      :pagination="pagination"
-                     rowKey="jogLogId"
+                     rowKey="logId"
                      :scroll="{ x: 1000 }"
                      size="small"
             >

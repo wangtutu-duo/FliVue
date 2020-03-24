@@ -19,7 +19,7 @@
                      :columns="colJobInfo"
                      :pagination="pagination"
                      rowKey="jobId"
-                     :scroll="{ x: 1800 }"
+                     :scroll="{ x: 2000 }"
                      size="small"
             >
 
@@ -108,16 +108,8 @@
             dataIndex: 'jobGroup',
           },
           {
-            title: 'job序号',
-            dataIndex: 'jobNo',
-          },
-          {
-            title: '机器名',
-            dataIndex: 'runHost',
-          },
-          {
-            title: '机器IP',
-            dataIndex: 'runIp',
+            title: 'job类型',
+            dataIndex: 'jobType',
           },
           {
             title: '创建时间',
@@ -140,6 +132,10 @@
             dataIndex: 'jobStatus',
           },
           {
+            title: '最大次数',
+            dataIndex: 'maxCount',
+          },
+          {
             title: '触发次数',
             dataIndex: 'triggerCount',
           },
@@ -154,6 +150,14 @@
           {
             title: '失败次数',
             dataIndex: 'failCount',
+          },
+          {
+            title: '机器名',
+            dataIndex: 'runHost',
+          },
+          {
+            title: '机器IP',
+            dataIndex: 'runIp',
           },
           {
             title: 'job备注',
