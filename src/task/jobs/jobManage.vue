@@ -2,33 +2,27 @@
   <div style="height:100%" v-loading="loading">
     <div class="card-container">
 
+
       <a-tabs type="card">
-        <a-tab-pane tab="操作" key="hand">
+        <a-tab-pane tab="手工处理" key="hand">
           <div>
             <a-row>
-              <a-col :span="5">请输入流程名称</a-col>
-              <a-col :span="7">
-                <wedit v-model="flowName" input-hint="请输入流程名称"></wedit>
-              </a-col>
-              <a-col :span="5">
-                <wbutton @click="inquireProcess">查询进程</wbutton>
-              </a-col>
-              <a-col :span="5">
-                <wbutton @click="deleteProcess">删除进程</wbutton>
+
+              <a-col :span="6">
+                <wbutton @click="inquireJobInfo">查询任务信息</wbutton>
               </a-col>
             </a-row>
 
 
             <a-table bordered
-                     rowKey="flowProcId"
-                     :dataSource="dataProc"
-                     :columns="colProc"
+                     :dataSource="dataJobInfo"
+                     :columns="colJobInfo"
                      :pagination="pagination"
-                     size="small"
+                     rowKey="jobId"
                      :scroll="{ x: 2000 }"
+                     size="small"
                      :rowSelection="rowSelection">
-              <a slot="flowProcId" slot-scope="text" href="javascript:;">{{text}}</a>
-              >
+            >
 
             </a-table>
 
@@ -74,12 +68,13 @@
 <script>
 
   import Wedit from "../../components/wcontrol/wedit";
+
   import Wbutton from "../../components/wcontrol/wbutton";
   import axios from '@/utils/axios.js'
   import JsonView from 'vue-json-viewer'
 
   export default {
-    name: "procInquire",
+    name: "jobManage",
     components: {Wbutton, Wedit, JsonView},
     props:
       {
@@ -88,84 +83,115 @@
       },
     data() {
       return {
-        dataProc: null,
+        dataJobInfo: null,
         pagination:
           {
+            //defaultCurrent:1,
+            //current:1,
+            // showSizeChange:()=>{this.inquireFlow();},
+            showQuickJumper: true,
             total: 0,
-            pageSize: 10,
+            pageSize: 8,
+            // change:()=>{this.inquireFlow();},
           },
-        colProc: [
-          {
-            title: '进程ID',
-            dataIndex: 'flowProcId',
-            scopedSlots: {customRender: 'flowProcId'},
-          },
-          {
-            title: '进程描述',
-            dataIndex: 'flowProcDesc',
+        colJobInfo: [
 
+          {
+            title: 'JobId',
+            dataIndex: 'jobId',
           },
           {
-            title: '流程Id',
-            dataIndex: 'flowId',
+            title: 'job名称',
+            dataIndex: 'jobName',
           },
           {
-            title: '流程名',
-            dataIndex: 'flowName',
+            title: 'job组',
+            dataIndex: 'jobGroup',
           },
           {
-            title: '流程版本',
-            dataIndex: 'flowVersion',
+            title: 'job类型',
+            dataIndex: 'jobType',
           },
           {
-            title: '进程创建时间',
-            dataIndex: 'flowProcCreate',
+            title: '创建时间',
+            dataIndex: 'jobCreate',
           },
           {
-            title: '进程开始时间',
-            dataIndex: 'flowProcBegin',
+            title: '开始时间',
+            dataIndex: 'jobBegin',
           },
           {
-            title: '进程结束时间',
-            dataIndex: 'flowProcEnd',
+            title: '上次执行时间',
+            dataIndex: 'prevTime',
           },
           {
-            title: '进程状态',
-            dataIndex: 'flowProcStatus',
+            title: '下次执行时间',
+            dataIndex: 'nextTime',
+          },
+          {
+            title: '最新状态',
+            dataIndex: 'jobStatus',
+          },
+          {
+            title: '最大次数',
+            dataIndex: 'maxCount',
+          },
+          {
+            title: '触发次数',
+            dataIndex: 'triggerCount',
+          },
+          {
+            title: '执行次数',
+            dataIndex: 'dealCount',
+          },
+          {
+            title: '成功次数',
+            dataIndex: 'okCount',
+          },
+          {
+            title: '失败次数',
+            dataIndex: 'failCount',
+          },
+          {
+            title: '机器名',
+            dataIndex: 'runHost',
+          },
+          {
+            title: '机器IP',
+            dataIndex: 'runIp',
+          },
+          {
+            title: 'job备注',
+            dataIndex: 'jobMemo',
           },
         ],
-        flowName: "flowBasic1",
-        processId: "",
-        processDesc: "用户新增2019",
+        selectJobs:{},
+
         inJsonData: {},
         outJsonData: {},
-        loading: false,
-        total: 0,
-        pageSize: 10,
-        selectProc:null
-
+        loading: false
       }
 
     },
-    created()
-    {
-      this.inquireProcess();
+    created: function () {
+      console.debug("begin inquire job log")
+      this.inquireJobInfo();
     },
     methods: {
-      deleteProcess() {
+      dealJob(actionType) {
 
         this.loading = true;
-        let aa = this.selectProc;
+        let aa = this.selectJobs;
         let filter = {
-          flowProcId: {in: this.selectProc}
+          flowProcId: {in: this.selectJobs}
         }
 
-        let proc = {
-          flowAction: "procDelete",
+        let job = {
+          jobAction: actionType,
           filter: filter,
         }
-        this.inJsonData = proc
-        axios.dealFlow(proc).then(({data}) => {
+        this.inJsonData = job
+        axios.dealJob(job).then(({data}) => {
           if (data.isSuccess) {
 
             this.outJsonData = data
@@ -181,23 +207,33 @@
 
 
       },
-      inquireProcess() {
+
+      inquireJobInfo() {
 
         this.loading = true;
-        let proc = {
+        let filter = {
+          jobStatus: {in: ["create", "open", "begin", "option"]},
+          //orgId:{is:this.orgId},
+          //userId:{is:this.userId}
+        }
+        let joblog = {
           //flowFirmId: "defalut",
           //flowAppId: "defalut",
-          flowName: this.flowName,
-          flowAction: "procInquire",
-          currentPage: 1,
-          pageSize: 10
-        }
-        this.inJsonData = proc
-        axios.dealFlow(proc).then(({data}) => {
-          if (data.isSuccess) {
+        //  flowName: this.flowName,
+        //  flowProcId: this.processId,
+          jobAction: "jobInquireInfo",
 
+         // filter: filter,
+          currentPage: 1,
+          pageSize: 1000,
+        }
+        this.inJsonData = joblog
+        axios.dealJob(joblog).then(({data}) => {
+          if (data.isSuccess) {
             this.outJsonData = data
-            this.dataProc = data.recordData;
+            this.dataJobInfo = data.recordData;
+
+            this.$message.success(data.okMessage)
           } else {
             this.$message.error(data.errorMessage)
           }
@@ -207,27 +243,28 @@
           this.$message.error("访问后台错误")
         });
 
-      }
-      ,
+      },
+
     },
     computed: {
       rowSelection() {
         const {selectedRowKeys} = this;
         return {
           onChange: (selectedRowKeys, selectedRows) => {
-            this.selectProc = selectedRowKeys;
+            this.selectJobs = selectedRowKeys;
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
           },
           getCheckboxProps: record => ({
             props: {
-              disabled: record.flowProcStatus === 'begin', // Column configuration not to be checked
+              disabled: record.jobStatus === 'running', // Column configuration not to be checked
               name: record.flowProcId,
             },
           }),
         };
       } ,
     }
-  } ;
+
+  };
 </script>
 <style>
   .editable-cell {
