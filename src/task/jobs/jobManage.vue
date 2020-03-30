@@ -2,14 +2,50 @@
   <div style="height:100%" v-loading="loading">
     <div class="card-container">
 
-
+      <a-modal
+        title="任务维护"
+        ref="jobModal"
+        style="top: 80px;width:600px"
+        :visible="modal1Visible"
+        @ok="() => editJobInfo()"
+        @cancel="() => cancelEdit()"
+      >
+      <job-edit :job-info="currentJobInfo" ref="editJob"></job-edit>
+      </a-modal>
       <a-tabs type="card">
         <a-tab-pane tab="手工处理" key="hand">
           <div>
             <a-row>
+              <a-col :span="3">
+                <wedit > </wedit>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="inquireJob">查询任务</wbutton>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="addJob">新增任务</wbutton>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="editJob">修改任务</wbutton>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="deleteJob">删除任务</wbutton>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="stopJob">停止任务</wbutton>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="startJob">启动任务</wbutton>
+              </a-col>
+              <a-col :span="2">
+                <wbutton @click="stopJob">关闭任务</wbutton>
+              </a-col>
 
-              <a-col :span="6">
-                <wbutton @click="inquireJobInfo">查询任务信息</wbutton>
+              <a-col :span="3">
+                <wedit v-model="hostIp"> </wedit>
+              </a-col>
+              <a-col :span="3">
+                <wedit v-model="hostName"> </wedit>
               </a-col>
             </a-row>
 
@@ -19,7 +55,7 @@
                      :columns="colJobInfo"
                      :pagination="pagination"
                      rowKey="jobId"
-                     :scroll="{ x: 2000 }"
+                     :scroll="{ x: 2400 }"
                      size="small"
                      :rowSelection="rowSelection">
             >
@@ -72,10 +108,11 @@
   import Wbutton from "../../components/wcontrol/wbutton";
   import axios from '@/utils/axios.js'
   import JsonView from 'vue-json-viewer'
+  import JobEdit from "./jobEdit";
 
   export default {
     name: "jobManage",
-    components: {Wbutton, Wedit, JsonView},
+    components: {JobEdit, Wbutton, Wedit, JsonView},
     props:
       {
         itemId: String,
@@ -116,9 +153,14 @@
             title: '创建时间',
             dataIndex: 'jobCreate',
           },
+
           {
             title: '开始时间',
             dataIndex: 'jobBegin',
+          },
+          {
+            title: '截止时间',
+            dataIndex: 'endTime',
           },
           {
             title: '上次执行时间',
@@ -165,25 +207,109 @@
             dataIndex: 'jobMemo',
           },
         ],
-        selectJobs:{},
+        selectJobs:[],
+        selectJobInfo:[],
+        currentJobInfo:{},
 
         inJsonData: {},
         outJsonData: {},
-        loading: false
+        loading: false,
+        hostName:"",
+        hostIp:"",
+        modal1Visible:false,
+
       }
 
     },
     created: function () {
       console.debug("begin inquire job log")
-      this.inquireJobInfo();
+      this.inquireJob();
     },
     methods: {
+
+
+      editJobInfo()
+      {
+        let aa = this.$refs.editJob.jobInfoData;
+        let  isFlowModel = this.$refs.editJob.isFlowModel;
+        let  isSimple = this.$refs.editJob.isSimple;
+        let  isStart = this.$refs.editJob.isStart;
+        this.modal1Visible=false;
+      },
+      cancelEdit()
+      {
+        this.modal1Visible=false;
+      },
+
+      addJob()
+      {
+        //this.dealJob("jobAdd");
+        this.modal1Visible=true;
+      },
+      editJob()
+      {
+        let aa = this.selectJobInfo;
+
+        if(aa.length!=1)
+        {
+          this.$message.info("请选择一条记录进行修改")
+          return;
+        }
+        this.currentJobInfo = aa[0];
+        if(this.currentJobInfo.jobGroup!="custom")
+        {
+          this.$message.info("系统产生的记录不能修改");
+          return;
+        }
+        this.modal1Visible=true;
+        //this.dealJob("jobEdit");
+      },
+      deleteJob()
+      {
+        let aa = this.selectJobs;
+        if(aa.length==0)
+        {
+          this.$message.info("请选择需要删除的任务")
+          return;
+        }
+        this.dealJob("jobDelete");
+      },
+      stopJob()
+      {
+        let aa = this.selectJobs;
+        if(aa.length==0)
+        {
+          this.$message.info("请选择需要停止的任务")
+          return;
+        }
+        this.dealJob("jobStop");
+      },
+      closeJob()
+      {
+        let aa = this.selectJobs;
+        if(aa.length==0)
+        {
+          this.$message.info("请选择需要关闭的任务")
+          return;
+        }
+        this.dealJob("jobClose");
+      },
+      startJob()
+      {
+        let aa = this.selectJobs;
+        if(aa.length==0)
+        {
+          this.$message.info("请选择需要启动的任务")
+          return;
+        }
+        this.dealJob("jobStart");
+      },
       dealJob(actionType) {
 
         this.loading = true;
         let aa = this.selectJobs;
         let filter = {
-          flowProcId: {in: this.selectJobs}
+          jobId: {in: this.selectJobs}
         }
 
         let job = {
@@ -205,10 +331,9 @@
           this.$message.error("访问后台错误")
         });
 
-
       },
 
-      inquireJobInfo() {
+      inquireJob() {
 
         this.loading = true;
         let filter = {
@@ -216,7 +341,7 @@
           //orgId:{is:this.orgId},
           //userId:{is:this.userId}
         }
-        let joblog = {
+        let job = {
           //flowFirmId: "defalut",
           //flowAppId: "defalut",
         //  flowName: this.flowName,
@@ -227,12 +352,14 @@
           currentPage: 1,
           pageSize: 1000,
         }
-        this.inJsonData = joblog
-        axios.dealJob(joblog).then(({data}) => {
+        this.inJsonData = job
+        this.dataJobInfo = null;
+        axios.dealJob(job).then(({data}) => {
           if (data.isSuccess) {
             this.outJsonData = data
             this.dataJobInfo = data.recordData;
-
+            this.hostName = data.hostName;
+            this.hostIp = data.hostIp;
             this.$message.success(data.okMessage)
           } else {
             this.$message.error(data.errorMessage)
@@ -252,11 +379,12 @@
         return {
           onChange: (selectedRowKeys, selectedRows) => {
             this.selectJobs = selectedRowKeys;
+            this.selectJobInfo = selectedRows;
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
           },
           getCheckboxProps: record => ({
             props: {
-              disabled: record.jobStatus === 'running', // Column configuration not to be checked
+              disabled: false, //record.jobStatus === 'running', // Column configuration not to be checked
               name: record.flowProcId,
             },
           }),

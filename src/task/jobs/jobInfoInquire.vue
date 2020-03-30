@@ -19,7 +19,7 @@
                      :columns="colJobInfo"
                      :pagination="pagination"
                      rowKey="jobId"
-                     :scroll="{ x: 2000 }"
+                     :scroll="{ x: 2400 }"
                      size="small"
             >
 
@@ -112,12 +112,20 @@
             dataIndex: 'jobType',
           },
           {
+            title: '最大次数',
+            dataIndex: 'maxCount',
+          },
+          {
             title: '创建时间',
             dataIndex: 'jobCreate',
           },
           {
             title: '开始时间',
             dataIndex: 'jobBegin',
+          },
+          {
+            title: '截止时间',
+            dataIndex: 'endTime',
           },
           {
             title: '上次执行时间',
@@ -131,10 +139,7 @@
             title: '最新状态',
             dataIndex: 'jobStatus',
           },
-          {
-            title: '最大次数',
-            dataIndex: 'maxCount',
-          },
+
           {
             title: '触发次数',
             dataIndex: 'triggerCount',
