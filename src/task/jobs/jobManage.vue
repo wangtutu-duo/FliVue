@@ -10,14 +10,14 @@
         @ok="() => editJobInfo()"
         @cancel="() => cancelEdit()"
       >
-      <job-edit :job-info="currentJobInfo" ref="editJob"></job-edit>
+        <job-edit :job-info="currentJobInfo"  ref="editJob"></job-edit>
       </a-modal>
       <a-tabs type="card">
         <a-tab-pane tab="手工处理" key="hand">
           <div>
             <a-row>
               <a-col :span="3">
-                <wedit > </wedit>
+                <wedit></wedit>
               </a-col>
               <a-col :span="2">
                 <wbutton @click="inquireJob">查询任务</wbutton>
@@ -42,10 +42,10 @@
               </a-col>
 
               <a-col :span="3">
-                <wedit v-model="hostIp"> </wedit>
+                <wedit v-model="hostIp"></wedit>
               </a-col>
               <a-col :span="3">
-                <wedit v-model="hostName"> </wedit>
+                <wedit v-model="hostName"></wedit>
               </a-col>
             </a-row>
 
@@ -58,7 +58,7 @@
                      :scroll="{ x: 2400 }"
                      size="small"
                      :rowSelection="rowSelection">
-            >
+              >
 
             </a-table>
 
@@ -207,16 +207,16 @@
             dataIndex: 'jobMemo',
           },
         ],
-        selectJobs:[],
-        selectJobInfo:[],
-        currentJobInfo:{},
-
+        selectJobs: [],
+        selectJobInfo: [],
+        currentJobInfo: {},
+        editData: {},
         inJsonData: {},
         outJsonData: {},
         loading: false,
-        hostName:"",
-        hostIp:"",
-        modal1Visible:false,
+        hostName: "",
+        hostIp: "",
+        modal1Visible: false,
 
       }
 
@@ -228,77 +228,76 @@
     methods: {
 
 
-      editJobInfo()
-      {
-        let aa = this.$refs.editJob.jobInfoData;
-        let  isFlowModel = this.$refs.editJob.isFlowModel;
-        let  isSimple = this.$refs.editJob.isSimple;
-        let  isStart = this.$refs.editJob.isStart;
-        this.modal1Visible=false;
+      editJobInfo() {
+        this.editData = this.$refs.editJob.jobInfoData;
+        let isFlowModel = this.$refs.editJob.isFlowModel;
+        let isSimple = this.$refs.editJob.isSimple;
+        let isStart = this.$refs.editJob.isStart;
+        if (isFlowModel) this.editData.jobType = "flowModel";
+        else this.editData.jobType = "appMethod";
+        if (isSimple) this.editData.triggleType = "simple";
+        else this.editData.triggleType = "cron";
+        if (isStart) this.editData.jobStatus = "waitstart";
+        else this.editData.jobStatus = "stop";
+
+        if (this.editData.jobId == "") this.dealJob("jobAdd");
+        else
+          this.dealJob("jobEdit");
+        this.modal1Visible = false;
       },
-      cancelEdit()
-      {
-        this.modal1Visible=false;
+      cancelEdit() {
+        this.modal1Visible = false;
+
       },
 
-      addJob()
-      {
-        //this.dealJob("jobAdd");
-        this.modal1Visible=true;
+      addJob() {
+        this.currentJobInfo = {};
+        this.currentJobInfo["jobType"]="addjob";
+
+        this.modal1Visible = true;
       },
-      editJob()
-      {
+      editJob() {
         let aa = this.selectJobInfo;
 
-        if(aa.length!=1)
-        {
+        if (aa.length != 1) {
           this.$message.info("请选择一条记录进行修改")
           return;
         }
         this.currentJobInfo = aa[0];
-        if(this.currentJobInfo.jobGroup!="custom")
-        {
+        if (this.currentJobInfo.jobGroup != "custom") {
           this.$message.info("系统产生的记录不能修改");
           return;
         }
-        this.modal1Visible=true;
-        //this.dealJob("jobEdit");
+        this.modal1Visible = true;
+
       },
-      deleteJob()
-      {
+      deleteJob() {
         let aa = this.selectJobs;
-        if(aa.length==0)
-        {
+        if (aa.length == 0) {
           this.$message.info("请选择需要删除的任务")
           return;
         }
         this.dealJob("jobDelete");
       },
-      stopJob()
-      {
+      stopJob() {
         let aa = this.selectJobs;
-        if(aa.length==0)
-        {
+        if (aa.length == 0) {
           this.$message.info("请选择需要停止的任务")
           return;
         }
         this.dealJob("jobStop");
       },
-      closeJob()
-      {
+      closeJob() {
         let aa = this.selectJobs;
-        if(aa.length==0)
-        {
+        if (aa.length == 0) {
           this.$message.info("请选择需要关闭的任务")
           return;
         }
         this.dealJob("jobClose");
       },
-      startJob()
-      {
+      startJob() {
         let aa = this.selectJobs;
-        if(aa.length==0)
-        {
+        if (aa.length == 0) {
           this.$message.info("请选择需要启动的任务")
           return;
         }
@@ -315,6 +314,7 @@
         let job = {
           jobAction: actionType,
           filter: filter,
+          jobInfo: this.editData,
         }
         this.inJsonData = job
         axios.dealJob(job).then(({data}) => {
@@ -344,11 +344,11 @@
         let job = {
           //flowFirmId: "defalut",
           //flowAppId: "defalut",
-        //  flowName: this.flowName,
-        //  flowProcId: this.processId,
+          //  flowName: this.flowName,
+          //  flowProcId: this.processId,
           jobAction: "jobInquireInfo",
 
-         // filter: filter,
+          // filter: filter,
           currentPage: 1,
           pageSize: 1000,
         }
@@ -389,7 +389,7 @@
             },
           }),
         };
-      } ,
+      },
     }
 
   };

@@ -124,9 +124,10 @@
         jobInfoData: {
           jobId: "",
           jobName: "",
+          madeBy: "custom",
           jobGroup: "custom",
           jobDesc: "",
-          dealType: "",
+          triggerType: "",
           jobType: "",
           trigger: {
             delay: "",
@@ -142,27 +143,41 @@
       };
     },
 
-    methods: {},
     watch: {
-      jobInfo(newVal, oldVal) {
-        if (newVal != null) {
+      jobInfo(newVal, oldValue) {
+        let jobtype = this.jobInfo.jobType;
+        if (jobtype  != "addjob") {
           this.jobInfoData.jobId = newVal.jobId;
           this.jobInfoData.jobName = newVal.jobName;
           this.jobInfoData.jobGroup = newVal.jobGroup;
           this.jobInfoData.jobDesc = newVal.jobDesc;
           this.jobInfoData.dealType = newVal.dealType;
           this.jobInfoData.jobType = newVal.jobType;
-          this.jobInfoData.trigger.delay = newVal.trigger.delay;
-          this.jobInfoData.trigger.interval = newVal.trigger.interval;
-          this.jobInfoData.trigger.runCount = newVal.trigger.runCount;
-          this.jobInfoData.trigger.runTime = newVal.trigger.runTime;
-          this.jobInfoData.trigger.cronExpress = newVal.trigger.cronExpress;
-          if(this.jobInfoData.dealType=="method")     //flowModel
-          { this.isFlowModel = true; } else { this.isFlowModel = false;}
-          if(this.jobInfoData.jobType=="simple")     //cron
-          { this.isSimple = true; } else { this.isSimple = false;}
-          if(this.jobInfoData.jobStatus=="start")     //
-          { this.isStart = true; } else { this.isStart = false;}
+          if (newVal.trigger != null) {
+            this.jobInfoData.trigger.delay = newVal.trigger.delay;
+            this.jobInfoData.trigger.interval = newVal.trigger.interval;
+            this.jobInfoData.trigger.runCount = newVal.trigger.runCount;
+            this.jobInfoData.trigger.runTime = newVal.trigger.runTime;
+            this.jobInfoData.trigger.cronExpress = newVal.trigger.cronExpress;
+          }
+          if (this.jobInfoData.dealType == "method")     //flowModel
+          {
+            this.isFlowModel = true;
+          } else {
+            this.isFlowModel = false;
+          }
+          if (this.jobInfoData.jobType == "simple")     //cron
+          {
+            this.isSimple = true;
+          } else {
+            this.isSimple = false;
+          }
+          if (this.jobInfoData.jobStatus == "start")     //
+          {
+            this.isStart = true;
+          } else {
+            this.isStart = false;
+          }
         } else {
           this.jobInfoData.jobId = "";
           this.jobInfoData.jobName = "";
@@ -175,12 +190,13 @@
           this.jobInfoData.trigger.runCount = "";
           this.jobInfoData.trigger.runTime = "";
           this.jobInfoData.trigger.cronExpress = "";
-          this.isFlowModel=true;
-          this.isSimple=true;
-          this.isStart=true;
+          this.isFlowModel = true;
+          this.isSimple = true;
+          this.isStart = true;
         }
       }
-    }
+    },
+
 
   }
 
