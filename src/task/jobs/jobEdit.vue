@@ -52,7 +52,7 @@
         触发类型:
       </a-col>
       <a-col :span="8">
-        <a-switch checkedChildren="简单触发器" unCheckedChildren="复杂触发器" defaultChecked v-model="isSimple"/>
+        <a-switch checkedChildren="simple触发" unCheckedChildren="cron触发" defaultChecked v-model="isSimple"/>
       </a-col>
       <a-col :span="4">
         启动标识:
