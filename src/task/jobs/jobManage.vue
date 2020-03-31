@@ -233,8 +233,17 @@
         let isFlowModel = this.$refs.editJob.isFlowModel;
         let isSimple = this.$refs.editJob.isSimple;
         let isStart = this.$refs.editJob.isStart;
-        if (isFlowModel) this.editData.jobType = "flowModel";
-        else this.editData.jobType = "appMethod";
+        if (isFlowModel)
+        {
+          this.editData.jobType = "flowModel";
+          this.editData.modelName = this.editData.dealName;
+          this.editData.appMethod = null;
+        }
+        else {
+          this.editData.jobType = "appMethod";
+          this.editData.appMethod = this.editData.dealName;
+          this.editData.modelName = null;
+        }
         if (isSimple) this.editData.triggerType = "simple";
         else this.editData.triggerType = "cron";
         if (isStart) this.editData.jobStatus = "waitstart";
@@ -252,7 +261,7 @@
 
       addJob() {
         this.currentJobInfo = {};
-        this.currentJobInfo["jobType"]="addjob";
+
 
         this.modal1Visible = true;
       },
@@ -269,7 +278,7 @@
           this.$message.info("系统产生的记录不能修改");
           return;
         }
-        this.currentJobInfo["jobType"]="editjob";
+
         this.modal1Visible = true;
 
       },

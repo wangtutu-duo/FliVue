@@ -248,7 +248,7 @@
       that.listenShortcut();
       that.initFlow();
       that.listenPage();
-
+/*
       setTimeout(function () {
         ZFSN.consoleLog([
           '欢迎使用VFD流程设计器!',
@@ -262,6 +262,8 @@
           description: "欢迎"
         });
       }, 1000);
+
+ */
     },
     data() {
       return {

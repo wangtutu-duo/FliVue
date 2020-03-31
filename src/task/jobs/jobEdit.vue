@@ -129,6 +129,9 @@
           jobDesc: "",
           triggerType: "",
           jobType: "",
+          modelName:"",
+          appMethod:"",
+          dealName:"",
           trigger: {
             delay: "",
             interval: "",
@@ -151,10 +154,10 @@
       prepareJobData(newVal)
       {
 
-        let jobtype = "addjob";
-        if(newVal!=null) jobtype = newVal.jobType;
+        let jobId = null;
+        if(newVal!=null) jobId = newVal.jobId;
 
-        if (jobtype  != "addjob") {
+        if (jobId != null&&jobId.length>0) {
           this.jobInfoData.jobId = newVal.jobId;
           this.jobInfoData.jobName = newVal.jobName;
           this.jobInfoData.jobGroup = newVal.jobGroup;
@@ -168,11 +171,13 @@
             this.jobInfoData.trigger.runTime = newVal.trigger.runTime;
             this.jobInfoData.trigger.cronExpress = newVal.trigger.cronExpress;
           }
-          if (this.jobInfoData.jobType == "method")     //flowModel
+          if (this.jobInfoData.jobType == "appMethod")     //flowModel
           {
             this.isFlowModel = true;
+            this.jobInfoData.dealName = newVal.appMethod;
           } else {
             this.isFlowModel = false;
+            this.jobInfoData.dealName = newVal.modelName;
           }
           if (this.jobInfoData.triggerType == "simple")     //cron
           {
@@ -180,7 +185,7 @@
           } else {
             this.isSimple = false;
           }
-          if (this.jobInfoData.triggerType == "start")     //
+          if (this.jobInfoData.jobStatus == "start")     //
           {
             this.isStart = true;
           } else {
@@ -188,9 +193,10 @@
           }
         } else {
           this.jobInfoData.jobId = "";
-          this.jobInfoData.jobName = "";
+          this.jobInfoData.jobName = "flowBasic1";
           this.jobInfoData.jobGroup = "custom";
           this.jobInfoData.jobDesc = "";
+          this.jobInfoData.dealName = "flowBasic1";
           this.jobInfoData.triggerType = "simple";
           this.jobInfoData.jobType = "flowModel";
           this.jobInfoData.trigger.delay = "1";
