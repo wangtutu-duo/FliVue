@@ -209,7 +209,7 @@
         ],
         selectJobs: [],
         selectJobInfo: [],
-        currentJobInfo: {},
+        currentJobInfo: null,
         editData: {},
         inJsonData: {},
         outJsonData: {},
@@ -235,8 +235,8 @@
         let isStart = this.$refs.editJob.isStart;
         if (isFlowModel) this.editData.jobType = "flowModel";
         else this.editData.jobType = "appMethod";
-        if (isSimple) this.editData.triggleType = "simple";
-        else this.editData.triggleType = "cron";
+        if (isSimple) this.editData.triggerType = "simple";
+        else this.editData.triggerType = "cron";
         if (isStart) this.editData.jobStatus = "waitstart";
         else this.editData.jobStatus = "stop";
 
@@ -263,11 +263,13 @@
           this.$message.info("请选择一条记录进行修改")
           return;
         }
-        this.currentJobInfo = aa[0];
+        if(this.selectJobs.length>0)
+          this.currentJobInfo = this.selectJobInfo[0];
         if (this.currentJobInfo.jobGroup != "custom") {
           this.$message.info("系统产生的记录不能修改");
           return;
         }
+        this.currentJobInfo["jobType"]="editjob";
         this.modal1Visible = true;
 
       },
@@ -380,6 +382,7 @@
           onChange: (selectedRowKeys, selectedRows) => {
             this.selectJobs = selectedRowKeys;
             this.selectJobInfo = selectedRows;
+
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
           },
           getCheckboxProps: record => ({

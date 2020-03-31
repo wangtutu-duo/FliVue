@@ -52,7 +52,7 @@
         触发类型:
       </a-col>
       <a-col :span="8">
-        <a-switch checkedChildren="simple触发" unCheckedChildren="cron触发" defaultChecked v-model="isSimple"/>
+        <a-switch checkedChildren="simple触发" unCheckedChildren="cron触发" defaultChecked v-model="isSimple" />
       </a-col>
       <a-col :span="4">
         启动标识:
@@ -61,7 +61,7 @@
         <a-switch checkedChildren="启动" unCheckedChildren="停止" defaultChecked v-model="isStart"/>
       </a-col>
     </a-row>
-    <div>
+    <div v-if="isSimple">
       <a-row>
         <a-col :span="4">
           延迟时间:
@@ -92,7 +92,7 @@
       </a-row>
 
     </div>
-    <div>
+    <div v-if="!isSimple">
       <a-row>
         <a-col :span="4">
           cron描述:
@@ -139,19 +139,27 @@
         },
         isFlowModel: true,
         isSimple: true,
+        isCron:false,
         isStart: true,
       };
     },
+    created()
+    {
+      this.prepareJobData(this.jobInfo);
+    },
+    methods: {
+      prepareJobData(newVal)
+      {
 
-    watch: {
-      jobInfo(newVal, oldValue) {
-        let jobtype = this.jobInfo.jobType;
+        let jobtype = "addjob";
+        if(newVal!=null) jobtype = newVal.jobType;
+
         if (jobtype  != "addjob") {
           this.jobInfoData.jobId = newVal.jobId;
           this.jobInfoData.jobName = newVal.jobName;
           this.jobInfoData.jobGroup = newVal.jobGroup;
           this.jobInfoData.jobDesc = newVal.jobDesc;
-          this.jobInfoData.dealType = newVal.dealType;
+          this.jobInfoData.triggerType = newVal.triggerType;
           this.jobInfoData.jobType = newVal.jobType;
           if (newVal.trigger != null) {
             this.jobInfoData.trigger.delay = newVal.trigger.delay;
@@ -160,19 +168,19 @@
             this.jobInfoData.trigger.runTime = newVal.trigger.runTime;
             this.jobInfoData.trigger.cronExpress = newVal.trigger.cronExpress;
           }
-          if (this.jobInfoData.dealType == "method")     //flowModel
+          if (this.jobInfoData.jobType == "method")     //flowModel
           {
             this.isFlowModel = true;
           } else {
             this.isFlowModel = false;
           }
-          if (this.jobInfoData.jobType == "simple")     //cron
+          if (this.jobInfoData.triggerType == "simple")     //cron
           {
             this.isSimple = true;
           } else {
             this.isSimple = false;
           }
-          if (this.jobInfoData.jobStatus == "start")     //
+          if (this.jobInfoData.triggerType == "start")     //
           {
             this.isStart = true;
           } else {
@@ -181,19 +189,24 @@
         } else {
           this.jobInfoData.jobId = "";
           this.jobInfoData.jobName = "";
-          this.jobInfoData.jobGroup = "";
+          this.jobInfoData.jobGroup = "custom";
           this.jobInfoData.jobDesc = "";
-          this.jobInfoData.dealType = "";
-          this.jobInfoData.jobType = "";
-          this.jobInfoData.trigger.delay = "";
-          this.jobInfoData.trigger.interval = "";
-          this.jobInfoData.trigger.runCount = "";
-          this.jobInfoData.trigger.runTime = "";
+          this.jobInfoData.triggerType = "simple";
+          this.jobInfoData.jobType = "flowModel";
+          this.jobInfoData.trigger.delay = "1";
+          this.jobInfoData.trigger.interval = "10";
+          this.jobInfoData.trigger.runCount = "1";
+          this.jobInfoData.trigger.runTime = "10";
           this.jobInfoData.trigger.cronExpress = "";
           this.isFlowModel = true;
           this.isSimple = true;
           this.isStart = true;
         }
+      },
+    },
+    watch: {
+      jobInfo(newVal, oldValue) {
+        this.prepareJobData(newVal);
       }
     },
 
