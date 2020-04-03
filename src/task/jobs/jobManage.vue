@@ -319,7 +319,7 @@
       },
 
       restartJob() {
-        let aa = this.selectJobs;
+        let aa = this.selectJobInfo;
         if (aa.length == 0) {
           this.$message.info("请选择需要重新启动的任务")
           return;
@@ -328,11 +328,11 @@
         {
           let job = aa[ii];
 
-          if(job.jobStatus!="stop"||job.jobStatus!="close")
+          if(job.jobStatus!="stop"&&job.jobStatus!="close")
           {
             this.$message.info("请选择停止或关闭的任务");
             return;
-          }else if (this.job.jobGroup != "custom") {
+          }else if (job.jobGroup != "custom") {
             this.$message.info("系统产生的记录不能停止或关闭的任务");
             return;
           }
