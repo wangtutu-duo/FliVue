@@ -23,6 +23,9 @@
           <a-form-item label="状态" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
             <a-input disabled v-model="flowData.attr.status"/>
           </a-form-item>
+          <a-form-item label="业务字段" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+            <a-input  v-model="flowData.bizFields"/>
+          </a-form-item>
         </a-form>
       </a-tab-pane>
       <a-tab-pane key="node-attr">
@@ -131,6 +134,9 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
+            <a-form-item label="创建方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入自定义创建方法" v-model="currentSelect.createMethod"/>
+            </a-form-item>
             <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入延迟时间（<60秒）" v-model="currentSelect.delay"/>
             </a-form-item>
@@ -139,6 +145,9 @@
             </a-form-item>
             <a-form-item label="执行次数" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入执行次数" v-model="currentSelect.runCount"/>
+            </a-form-item>
+            <a-form-item label="运行时长" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入运行时间（秒）" v-model="currentSelect.runTime"/>
             </a-form-item>
           </a-form>
         </template>
@@ -155,6 +164,9 @@
             </a-form-item>
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
+            </a-form-item>
+            <a-form-item label="自定义创建" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入自定义创建方法" v-model="currentSelect.createMethod"/>
             </a-form-item>
             <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入延迟时间（<60秒）" v-model="currentSelect.delay"/>

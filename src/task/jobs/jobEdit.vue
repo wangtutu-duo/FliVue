@@ -173,10 +173,10 @@
           }
           if (this.jobInfoData.jobType == "appMethod")     //flowModel
           {
-            this.isFlowModel = true;
+            this.isFlowModel = false;
             this.jobInfoData.dealName = newVal.appMethod;
           } else {
-            this.isFlowModel = false;
+            this.isFlowModel = true;
             this.jobInfoData.dealName = newVal.modelName;
           }
           if (this.jobInfoData.triggerType == "simple")     //cron

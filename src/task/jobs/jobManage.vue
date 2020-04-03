@@ -40,7 +40,9 @@
               <a-col :span="2">
                 <wbutton @click="stopJob">关闭任务</wbutton>
               </a-col>
-
+              <a-col :span="2">
+                <wbutton @click="restartJob">重启任务</wbutton>
+              </a-col>
               <a-col :span="3">
                 <wedit v-model="hostIp"></wedit>
               </a-col>
@@ -252,20 +254,21 @@
         if (this.editData.jobId == "") this.dealJob("jobAdd");
         else
           this.dealJob("jobEdit");
+
         this.modal1Visible = false;
       },
       cancelEdit() {
+
         this.modal1Visible = false;
 
       },
 
       addJob() {
         this.currentJobInfo = {};
-
-
         this.modal1Visible = true;
       },
       editJob() {
+        this.currentJobInfo = {};
         let aa = this.selectJobInfo;
 
         if (aa.length != 1) {
@@ -314,6 +317,31 @@
         }
         this.dealJob("jobStart");
       },
+
+      restartJob() {
+        let aa = this.selectJobs;
+        if (aa.length == 0) {
+          this.$message.info("请选择需要重新启动的任务")
+          return;
+        }
+        for(let ii =0; ii<aa.length; ii++)
+        {
+          let job = aa[ii];
+
+          if(job.jobStatus!="stop"||job.jobStatus!="close")
+          {
+            this.$message.info("请选择停止或关闭的任务");
+            return;
+          }else if (this.job.jobGroup != "custom") {
+            this.$message.info("系统产生的记录不能停止或关闭的任务");
+            return;
+          }
+
+        }
+        this.dealJob("jobReStart");
+      },
+
+
       dealJob(actionType) {
 
         this.loading = true;

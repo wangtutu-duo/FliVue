@@ -62,9 +62,14 @@ export const commonNodes = [
   {
     type: 'auto',
     nodeName: '',
-    method: '',
+    createMethod: '',
+    //skipFlag:'',    //跳过标志，不考虑是否成功。
     icon: 'autoIcon',
     nodeDesc: '自动节点',
+    delay: '',
+    interval: '',
+    runCount: '',   //运行次数
+    runTime: '',   //运行时间
   },
 
   {
@@ -94,7 +99,7 @@ export const commonNodes = [
   {
     type: 'threads',
     nodeName: '',
-    method: '',
+    createMethod: '',
     icon: 'autoIcon',
     nodeDesc: '多线程',
     delay: '',

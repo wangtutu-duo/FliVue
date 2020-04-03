@@ -296,12 +296,14 @@
         flowData: {
           nodeList: [],
           linkList: [],
+          bizFields:"",
           attr: {
             id: '',
             name: 'flow',
             desc: '流程图',
             version: '1.0',
-            status: "released" // creating   released, other
+            status: "released", // creating   released, other
+
           },
           config: {
             showGrid: true,
