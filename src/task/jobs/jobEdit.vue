@@ -100,6 +100,12 @@
         <a-col :span="20">
           <a-input v-model="jobInfoData.trigger.cronExpress"></a-input>
         </a-col>
+        <a-col :span="4">
+          cron说明:
+        </a-col>
+        <a-col :span="20">
+          <a-input v-model="jobInfoData.trigger.cronMemo"></a-input>
+        </a-col>
       </a-row>
     </div>
 
@@ -137,7 +143,8 @@
             interval: "",
             runCount: "",
             runTime: "",
-            cronExpress: ""
+            cronExpress: "",
+            cronMemo: ""
           },
         },
         isFlowModel: true,

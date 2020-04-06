@@ -48,6 +48,7 @@ export const commonNodes = [
   {
     type: 'common',
     nodeName: '',
+    createMethod:'',
     icon: 'CommonIcon',
     nodeDesc: '人工处理',
     referNode: ''
@@ -63,6 +64,7 @@ export const commonNodes = [
     type: 'auto',
     nodeName: '',
     createMethod: '',
+    dealMethod:'',
     //skipFlag:'',    //跳过标志，不考虑是否成功。
     icon: 'autoIcon',
     nodeDesc: '自动节点',
@@ -86,12 +88,13 @@ export const commonNodes = [
     icon: 'GatewayIcon',
     pass:"",    //可以填数字或百分比
     script:"",  //通过脚本判断
-    method:""   //每次调用后台判断方法
+    dealMethod:""   //每次调用后台判断方法
 
   },
   {
     type: 'commons',
     nodeName: '',
+    createMethod: '',
     icon: 'CommonIcon',
     nodeDesc: '多任务',
 
@@ -100,6 +103,7 @@ export const commonNodes = [
     type: 'threads',
     nodeName: '',
     createMethod: '',
+    dealMethod:'',
     icon: 'autoIcon',
     nodeDesc: '多线程',
     delay: '',
@@ -109,6 +113,7 @@ export const commonNodes = [
   {
     type: 'notice',
     nodeName: '',
+    createMethod:'',
     icon: 'autoIcon',
     nodeDesc: '通知',
 

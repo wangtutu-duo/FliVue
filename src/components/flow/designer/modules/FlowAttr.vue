@@ -81,6 +81,9 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" :value="currentSelect.nodeDesc" @change="nodeDescChange"/>
             </a-form-item>
+            <a-form-item label="创建方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入创建方法" v-model="currentSelect.createMethod"/>
+            </a-form-item>
             <a-form-item label="参照节点" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入参照节点" v-model="currentSelect.referNode"/>
             </a-form-item>
@@ -100,7 +103,9 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" :value="currentSelect.nodeDesc" @change="nodeDescChange"/>
             </a-form-item>
-
+            <a-form-item label="创建方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入创建方法" v-model="currentSelect.createMethod"/>
+            </a-form-item>
           </a-form>
         </template>
         <template v-if="currentSelect.type == 'option'">
@@ -135,7 +140,10 @@
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
             <a-form-item label="创建方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入自定义创建方法" v-model="currentSelect.createMethod"/>
+              <a-input placeholder="请输入创建方法" v-model="currentSelect.createMethod"/>
+            </a-form-item>
+            <a-form-item label="执行方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入执行方法" v-model="currentSelect.dealMethod"/>
             </a-form-item>
             <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入延迟时间（<60秒）" v-model="currentSelect.delay"/>
@@ -165,8 +173,11 @@
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
             </a-form-item>
-            <a-form-item label="自定义创建" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
-              <a-input placeholder="请输入自定义创建方法" v-model="currentSelect.createMethod"/>
+            <a-form-item label="创建方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入创建方法" v-model="currentSelect.createMethod"/>
+            </a-form-item>
+            <a-form-item label="执行方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入执行方法" v-model="currentSelect.dealMethod"/>
             </a-form-item>
             <a-form-item label="延迟时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入延迟时间（<60秒）" v-model="currentSelect.delay"/>
@@ -195,6 +206,9 @@
             </a-form-item>
             <a-form-item label="节点描述" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
               <a-input placeholder="请输入节点描述" v-model="currentSelect.nodeDesc"/>
+            </a-form-item>
+            <a-form-item label="创建方法" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+              <a-input placeholder="请输入创建方法" v-model="currentSelect.createMethod"/>
             </a-form-item>
 
           </a-form>

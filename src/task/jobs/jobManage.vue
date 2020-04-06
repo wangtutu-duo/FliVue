@@ -144,6 +144,10 @@
             dataIndex: 'jobName',
           },
           {
+            title: 'job描述',
+            dataIndex: 'jobDesc',
+          },
+          {
             title: 'job组',
             dataIndex: 'jobGroup',
           },
@@ -258,7 +262,7 @@
         this.modal1Visible = false;
       },
       cancelEdit() {
-
+        this.currentJobInfo = {};
         this.modal1Visible = false;
 
       },
@@ -381,10 +385,7 @@
           //userId:{is:this.userId}
         }
         let job = {
-          //flowFirmId: "defalut",
-          //flowAppId: "defalut",
-          //  flowName: this.flowName,
-          //  flowProcId: this.processId,
+
           jobAction: "jobInquireInfo",
 
           // filter: filter,
@@ -393,13 +394,16 @@
         }
         this.inJsonData = job
         this.dataJobInfo = null;
+
         axios.dealJob(job).then(({data}) => {
           if (data.isSuccess) {
             this.outJsonData = data
             this.dataJobInfo = data.recordData;
             this.hostName = data.hostName;
             this.hostIp = data.hostIp;
+
             this.$message.success(data.okMessage)
+
           } else {
             this.$message.error(data.errorMessage)
           }
