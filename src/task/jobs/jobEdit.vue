@@ -95,7 +95,7 @@
     <div v-if="!isSimple">
       <a-row>
         <a-col :span="4">
-          cron描述:
+          cron设定:
         </a-col>
         <a-col :span="20">
           <a-input v-model="jobInfoData.trigger.cronExpress"></a-input>
@@ -177,6 +177,7 @@
             this.jobInfoData.trigger.runCount = newVal.trigger.runCount;
             this.jobInfoData.trigger.runTime = newVal.trigger.runTime;
             this.jobInfoData.trigger.cronExpress = newVal.trigger.cronExpress;
+            this.jobInfoData.trigger.cronMemo = newVal.trigger.cronMemo;
           }
           if (this.jobInfoData.jobType == "appMethod")     //flowModel
           {
@@ -211,6 +212,7 @@
           this.jobInfoData.trigger.runCount = "1";
           this.jobInfoData.trigger.runTime = "10";
           this.jobInfoData.trigger.cronExpress = "";
+          this.jobInfoData.trigger.cronMemo = "";
           this.isFlowModel = true;
           this.isSimple = true;
           this.isStart = true;
