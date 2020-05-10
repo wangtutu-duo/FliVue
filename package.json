@@ -18,7 +18,7 @@
     "element-ui": "^2.2.2",
     "html2canvas": "^1.0.0-rc.3",
     "iview": "^3.5.4",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jquery-ui": "^1.12.1",
     "jsdom": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
