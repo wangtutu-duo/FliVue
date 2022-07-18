@@ -19,7 +19,7 @@
     "html2canvas": "^1.0.0-rc.3",
     "iview": "^3.5.4",
     "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.2",
     "jsdom": "^13.2.0",
     "jsonwebtoken": "^8.2.1",
     "jsplumb": "^2.11.0",
