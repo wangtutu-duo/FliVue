@@ -21,7 +21,7 @@
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
     "jsdom": "^13.2.0",
-    "jsonwebtoken": "^8.2.1",
+    "jsonwebtoken": "^9.0.0",
     "jsplumb": "^2.11.0",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",
